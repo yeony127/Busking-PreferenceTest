@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="2026 김포 버스킹 페스티벌 방문객을 위한 12문항 취향 테스트 - 퍼포먼스형·대중음악형·악기연주형·전통예술형 중 나의 최애 버스킹 취향을 찾고 맞춤 무대 추천과 공유 카드를 받아보세요.">
+<title>최애 버스킹 취향 테스트</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+
+  :root{
+    --green-deep:#1F5C3A;
+    --green-mid:#2F8C4F;
+    --green-bright:#8FD14F;
+    --yellow:#FFC72C;
+    --pink:#FF4F8B;
+    --cream:#FFFBEF;
+    --ink:#173B29;
+    --ink-soft:#3E6B54;
+    --line:#E4E0CC;
+    --shadow:rgba(23,59,41,.28);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100%;
+    background:
+      radial-gradient(circle at 12% 10%, rgba(255,199,44,.32), transparent 42%),
+      radial-gradient(circle at 90% 85%, rgba(255,79,139,.26), transparent 46%),
+      linear-gradient(160deg, var(--green-deep) 0%, var(--green-mid) 48%, var(--green-bright) 100%);
+    font-family:'Noto Sans KR', sans-serif;
+    color:var(--ink);
+    display:flex;
+    justify-content:center;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{ text-wrap:balance; margin:0; }
+  .display{ font-family:'Jua','Noto Sans KR',sans-serif; }
+  button{ font-family:inherit; }
+
+  /* ---------- floating decorations ---------- */
+  .deco{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+  .deco span{
+    position:absolute; font-size:30px; opacity:.5; filter:drop-shadow(0 4px 6px rgba(0,0,0,.15));
+    animation:bob 7s ease-in-out infinite;
+  }
+  @keyframes bob{
+    0%,100%{ transform:translateY(0) rotate(-4deg); }
+    50%{ transform:translateY(-20px) rotate(6deg); }
+  }
+  @media (prefers-reduced-motion:reduce){ .deco span{ animation:none; } }
+
+  /* ---------- app frame (landscape) ---------- */
+  .stage{
+    position:relative; z-index:1;
+    width:100%; max-width:1080px;
+    min-height:100dvh;
+    padding:20px 20px 30px;
+    display:flex; flex-direction:column;
+  }
+  .brand-row{ display:flex; align-items:center; gap:8px; color:#EFFBE9; margin-bottom:14px; }
+  .brand-badge{
+    width:30px;height:30px;border-radius:50%; background:var(--cream);
+    display:flex; align-items:center; justify-content:center; font-size:16px; flex:none;
+    box-shadow:0 2px 6px rgba(0,0,0,.2);
+  }
+  .brand-row .name{ font-weight:700; font-size:13px; letter-spacing:.02em; }
+  .brand-row .name b{ font-family:'Jua'; font-weight:400; }
+  .brand-row .date{ margin-left:auto; font-size:11px; background:rgba(255,255,255,.18); padding:4px 9px; border-radius:999px; }
+
+  .card{
+    background:var(--cream);
+    border-radius:30px;
+    box-shadow:0 22px 44px var(--shadow), 0 2px 0 rgba(255,255,255,.6) inset;
+    padding:30px 34px 28px;
+    flex:1;
+    display:flex; flex-direction:column;
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:""; position:absolute; top:-90px; right:-90px; width:220px; height:220px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,199,44,.32), transparent 70%);
+  }
+
+  .screen{ position:relative; z-index:1; display:flex; flex-direction:column; flex:1; }
+  .hidden{ display:none !important; }
+
+  @media (max-width:760px){
+    .stage{ padding:14px 12px 22px; }
+    .card{ padding:22px 18px 20px; border-radius:24px; }
+  }
+
+  /* ---------- start screen ---------- */
+  .start-grid{ display:grid; grid-template-columns:1.15fr .85fr; gap:30px; align-items:start; }
+  @media (max-width:760px){ .start-grid{ grid-template-columns:1fr; gap:18px; } }
+
+  .start-eyebrow{
+    display:inline-flex; align-items:center; gap:6px; background:var(--green-deep); color:#EFFBE9;
+    font-size:11.5px; font-weight:700; letter-spacing:.03em; padding:6px 12px; border-radius:999px; margin-bottom:14px;
+  }
+  .start-title{ font-size:30px; line-height:1.28; color:var(--green-deep); margin-bottom:14px; }
+  .start-title .hl{ color:var(--pink); }
+  .start-sub{ font-size:14.5px; color:var(--ink-soft); line-height:1.75; margin-bottom:22px; }
+  .start-sub b{ color:var(--green-deep); }
+  .cta{
+    border:none; cursor:pointer; background:linear-gradient(135deg, var(--pink), #ff7aa8);
+    color:#fff; font-weight:700; font-size:17px; padding:16px 26px; border-radius:18px;
+    box-shadow:0 10px 22px rgba(255,79,139,.4);
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    transition:transform .15s ease;
+  }
+  .cta:active{ transform:scale(.97); }
+
+  .fest-info{
+    background:#fff; border:1.5px dashed var(--line); border-radius:18px; padding:18px 18px;
+    font-size:13px; color:var(--ink-soft); line-height:1.95; height:100%;
+  }
+  .fest-info b{ color:var(--green-deep); }
+
+  .parade{
+    margin-top:26px; border-radius:22px; overflow:hidden; position:relative;
+    background:linear-gradient(180deg, #F5F0DC 0%, #EAE3C6 100%);
+    padding:14px 18px 0;
+    display:flex; align-items:flex-end; justify-content:space-evenly; gap:6px;
+    min-height:140px;
+  }
+  .parade::after{
+    content:""; position:absolute; left:0; right:0; bottom:0; height:14px;
+    background:var(--green-mid);
+  }
+  .parade figure{ margin:0; flex:none; animation:paradeBob 3.2s ease-in-out infinite; }
+  .parade figure:nth-child(2){ animation-delay:.4s; }
+  .parade figure:nth-child(3){ animation-delay:.8s; }
+  .parade figure:nth-child(4){ animation-delay:1.2s; }
+  @keyframes paradeBob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-6px); } }
+  @media (prefers-reduced-motion:reduce){ .parade figure{ animation:none; } }
+  .parade svg{ display:block; width:76px; height:96px; }
+  @media (max-width:760px){ .parade svg{ width:58px; height:74px; } .parade{ gap:2px; } }
+
+  /* ---------- quiz screen ---------- */
+  .quiz-top{ margin-bottom:18px; }
+  .progress-labels{ display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:var(--green-deep); margin-bottom:6px; }
+  .progress-track{ height:9px; background:#EDE8D2; border-radius:999px; overflow:hidden; }
+  .progress-fill{ display:block; height:100%; border-radius:999px; background:linear-gradient(90deg, var(--yellow), var(--pink)); transition:width .35s ease; }
+  .dots{ display:flex; gap:4px; margin-top:9px; flex-wrap:wrap; }
+  .dot{ width:9px;height:9px;border-radius:50%; background:#E3DFC9; transition:background .2s; }
+  .dot.done{ background:var(--pink); }
+  .dot.cur{ background:var(--yellow); box-shadow:0 0 0 3px rgba(255,199,44,.35); }
+
+  .q-text{ font-size:20px; font-weight:700; line-height:1.55; color:var(--green-deep); margin-bottom:20px; max-width:760px; }
+  .q-num{ color:var(--pink); font-family:'Jua'; margin-right:4px; }
+
+  .options{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:760px){ .options{ grid-template-columns:1fr; } }
+  .opt{
+    position:relative; text-align:left; border:2px solid var(--line); background:#fff;
+    border-radius:18px; padding:14px 16px; cursor:pointer;
+    display:flex; align-items:flex-start; gap:11px; font-size:14px; line-height:1.5; color:var(--ink);
+    transition:border-color .15s, background .15s, transform .1s;
+  }
+  .opt:hover{ border-color:var(--green-bright); background:#F5FBEF; }
+  .opt:active{ transform:scale(.985); }
+  .opt .badge{
+    flex:none; width:28px;height:28px;border-radius:50%; background:var(--green-deep); color:#fff;
+    font-family:'Jua'; display:flex; align-items:center; justify-content:center; font-size:13px; transition:background .15s;
+  }
+  .opt .icon{ font-size:17px; margin-right:2px; }
+  .opt.selected{ border-color:var(--pink); background:#FFF3F7; box-shadow:0 0 0 2px rgba(255,79,139,.25) inset; }
+  .opt.selected .badge{ background:var(--pink); }
+  .opt.selected::after{
+    content:"✓"; position:absolute; top:10px; right:12px; color:var(--pink); font-weight:900; font-size:15px;
+  }
+
+  .quiz-bottom{ margin-top:auto; padding-top:18px; display:flex; justify-content:flex-start; }
+  .back-btn{
+    width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line); background:#fff; color:var(--ink-soft);
+    font-size:17px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .back-btn:hover{ border-color:var(--green-bright); }
+
+  /* ---------- result screen ---------- */
+  .result-grid{ display:grid; grid-template-columns:1fr 1fr; gap:34px; align-items:start; }
+  @media (max-width:760px){ .result-grid{ grid-template-columns:1fr; gap:22px; } }
+
+  .res-badge{ font-size:56px; line-height:1; margin-bottom:6px; }
+  .res-tag{ font-size:12.5px; font-weight:700; color:var(--pink); margin-bottom:6px; }
+  .res-title{ font-size:24px; color:var(--green-deep); line-height:1.35; margin-bottom:10px; }
+  .res-desc{ font-size:13.5px; line-height:1.8; color:var(--ink-soft); margin-bottom:14px; }
+  .kw-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:18px; }
+  .kw{ background:#EFF7E9; color:var(--green-deep); font-size:11.5px; font-weight:700; padding:5px 11px; border-radius:999px; }
+
+  .score-box{ background:#fff; border-radius:16px; padding:16px 17px; border:1.5px solid var(--line); }
+  .score-box h4{ font-size:12px; color:var(--ink-soft); margin-bottom:11px; font-weight:700; }
+  .score-row{ display:flex; align-items:center; gap:8px; margin-bottom:9px; font-size:11.5px; }
+  .score-row:last-child{ margin-bottom:0; }
+  .score-row .lbl{ width:88px; flex:none; font-weight:700; color:var(--ink); display:flex; align-items:center; gap:5px; }
+  .score-bar-track{ flex:1; height:9px; background:#EDE8D2; border-radius:999px; overflow:hidden; }
+  .score-bar-fill{ display:block; height:100%; border-radius:999px; }
+  .score-row .val{ width:22px; text-align:right; font-weight:700; color:var(--ink-soft); flex:none; }
+
+  .tt-heading{ font-size:15px; font-weight:700; color:var(--green-deep); margin-bottom:4px; display:flex; align-items:center; gap:6px; }
+  .tt-sub{ font-size:11.5px; color:var(--ink-soft); margin-bottom:10px; }
+  .stage-card{ border-radius:16px; border:1.5px solid var(--line); background:#fff; margin-bottom:12px; overflow:hidden; }
+  .stage-card.glow{ border-color:var(--yellow); box-shadow:0 0 0 3px rgba(255,199,44,.28); }
+  .stage-card-head{
+    background:var(--green-deep); color:#fff; font-size:12.5px; font-weight:700; padding:8px 12px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .stage-card-head span.g{ font-weight:400; opacity:.85; font-size:11px; }
+  .slot-row{ display:flex; gap:9px; align-items:center; padding:7px 12px; font-size:12px; border-top:1px solid #F1EEDC; color:var(--ink-soft); }
+  .slot-row .t{ flex:none; width:80px; font-variant-numeric:tabular-nums; color:var(--ink); font-weight:700; font-size:11px; }
+  .slot-row .a{ flex:1; }
+  .slot-row.hl{
+    background:linear-gradient(90deg, rgba(255,199,44,.22), rgba(255,79,139,.14)); color:var(--ink); font-weight:700;
+    animation:pulseRow 1.6s ease-in-out infinite;
+  }
+  @keyframes pulseRow{ 0%,100%{ box-shadow: inset 0 0 0 0 rgba(255,199,44,0); } 50%{ box-shadow: inset 0 0 0 999px rgba(255,199,44,.14); } }
+  @media (prefers-reduced-motion:reduce){ .slot-row.hl{ animation:none; } }
+  .slot-row .star{ flex:none; font-size:12px; }
+
+  .tt-note{ font-size:10.5px; color:var(--ink-soft); opacity:.85; margin:2px 0 18px; line-height:1.6; }
+
+  .share-title{ font-size:13px; font-weight:700; color:var(--green-deep); margin-bottom:9px; }
+  .share-row{ display:flex; gap:9px; margin-bottom:6px; }
+  .share-btn{
+    flex:1; border:none; cursor:pointer; border-radius:15px; padding:13px 8px; font-weight:700; font-size:12.5px;
+    display:flex; flex-direction:column; align-items:center; gap:4px; color:#fff;
+  }
+  .share-btn.kko{ background:linear-gradient(135deg,#3C1E1E,#5B2E2E); }
+  .share-btn.ig{ background:linear-gradient(135deg,#F58529,#DD2A7B 45%,#8134AF 75%,#515BD4); }
+  .share-btn .e{ font-size:20px; }
+
+  .retry-row{ grid-column:1 / -1; display:flex; justify-content:center; margin-top:6px; }
+  .retry-btn{
+    border:1.6px solid var(--green-deep); background:#fff; color:var(--green-deep); font-weight:700; font-size:13.5px;
+    padding:12px 28px; border-radius:14px; cursor:pointer;
+  }
+
+  .toast{
+    position:fixed; left:50%; bottom:26px; transform:translateX(-50%); background:var(--ink); color:#fff;
+    font-size:12.5px; font-weight:700; padding:11px 18px; border-radius:999px; box-shadow:0 8px 20px rgba(0,0,0,.3);
+    z-index:50; opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(-6px); }
+
+  .card-modal{
+    position:fixed; inset:0; background:rgba(15,35,26,.72); z-index:60; display:flex; align-items:center; justify-content:center;
+    padding:20px; backdrop-filter:blur(2px);
+  }
+  .card-modal.hidden{ display:none; }
+  .card-modal-inner{ max-width:320px; width:100%; text-align:center; }
+  .card-modal img{ width:100%; border-radius:20px; box-shadow:0 20px 50px rgba(0,0,0,.4); }
+  .card-modal p{ color:#fff; font-size:12.5px; margin:14px 0; line-height:1.6; }
+  .card-modal button{ border:none; background:#fff; color:var(--ink); font-weight:700; font-size:13px; padding:10px 20px; border-radius:999px; cursor:pointer; }
+</style>
+</head>
+<body>
+<div class="deco" aria-hidden="true">
+  <span style="top:6%; left:6%; animation-delay:0s;">🎵</span>
+  <span style="top:12%; right:8%; animation-delay:1.2s;">🎸</span>
+  <span style="top:70%; right:5%; animation-delay:.6s;">🥁</span>
+  <span style="top:84%; left:10%; animation-delay:1.8s; font-size:24px;">🌼</span>
+  <span style="top:32%; right:20%; animation-delay:2.6s; font-size:22px;">🎶</span>
+</div>
+
+<div class="stage">
+  <div class="brand-row">
+    <div class="brand-badge">🌼</div>
+    <div class="name"><b>(재)김포문화재단</b> · 2026 김포 버스킹 페스티벌</div>
+    <div class="date">9.6(일)</div>
+  </div>
+
+  <div class="card">
+
+    <!-- ============ START ============ -->
+    <section id="screen-start" class="screen">
+      <div class="start-grid">
+        <div>
+          <div class="start-eyebrow">🎪 이색 체험 프로그램</div>
+          <h1 class="start-title display">나의 <span class="hl">최애 버스킹</span> 취향은 무엇일까?</h1>
+          <p class="start-sub">
+            총 12개의 질문에 <b>‘가장 끌리는 답’</b>을 고르면 나도 몰랐던 <b>‘나만의 버스킹 취향’</b>을 알려드려요!
+            <br><br>
+            오늘 &lt;2026 김포 버스킹 페스티벌&gt;에서 꼭 만나야 할 무대도 함께 추천해드립니다!
+          </p>
+          <button class="cta" id="startBtn">테스트 시작하기 <span>→</span></button>
+        </div>
+        <div class="fest-info">
+          📍 <b>김포아트빌리지 잔디광장 일원</b><br>
+          🗓️ <b>2026.9.6(일) 13:00–18:00</b><br>
+          🎁 취향 테스트 완료 시 선착순 <b>‘깜짝 기념품’</b>도 증정😍
+        </div>
+      </div>
+
+      <div class="parade" aria-hidden="true">
+        <!-- 삐에로 -->
+        <figure>
+          <svg viewBox="0 0 104 130">
+            <rect x="40" y="90" width="9" height="28" rx="4.5" fill="var(--green-mid)"/>
+            <rect x="55" y="90" width="9" height="28" rx="4.5" fill="var(--green-mid)"/>
+            <path d="M30 60 Q52 46 74 60 L78 96 Q52 110 26 96 Z" fill="#FFFBEF" stroke="var(--line)" stroke-width="2"/>
+            <circle cx="42" cy="76" r="4" fill="var(--pink)"/>
+            <circle cx="62" cy="84" r="4" fill="var(--yellow)"/>
+            <circle cx="50" cy="92" r="4" fill="var(--green-mid)"/>
+            <path d="M26 60 q6 -11 12 0 q6 -11 12 0 q6 -11 12 0 q6 -11 12 0 l-3 9 -50 0 Z" fill="var(--pink)"/>
+            <rect x="14" y="60" width="9" height="24" rx="4.5" fill="#FFFBEF" transform="rotate(-25 18 60)"/>
+            <rect x="81" y="60" width="9" height="24" rx="4.5" fill="#FFFBEF" transform="rotate(25 86 60)"/>
+            <circle cx="14" cy="44" r="6" fill="var(--yellow)"/>
+            <circle cx="52" cy="34" r="6" fill="var(--pink)"/>
+            <circle cx="90" cy="44" r="6" fill="var(--green-bright)"/>
+            <circle cx="52" cy="38" r="19" fill="#FFE3C2"/>
+            <path d="M33 32 Q52 6 71 32" fill="none" stroke="var(--yellow)" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="52" cy="14" r="5" fill="var(--yellow)"/>
+            <circle cx="45" cy="40" r="2.4" fill="var(--ink)"/>
+            <circle cx="59" cy="40" r="2.4" fill="var(--ink)"/>
+            <circle cx="52" cy="46" r="3.2" fill="var(--pink)"/>
+            <path d="M44 51 Q52 56 60 51" stroke="var(--ink)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+        </figure>
+        <!-- 마술사 -->
+        <figure>
+          <svg viewBox="0 0 104 130">
+            <rect x="40" y="90" width="9" height="28" rx="4.5" fill="var(--ink)"/>
+            <rect x="55" y="90" width="9" height="28" rx="4.5" fill="var(--ink)"/>
+            <path d="M70 58 L94 100 Q60 108 34 100 Z" fill="var(--pink)" opacity=".85"/>
+            <rect x="30" y="58" width="44" height="40" rx="16" fill="var(--green-deep)"/>
+            <rect x="44" y="70" width="16" height="24" rx="4" fill="#fff"/>
+            <circle cx="52" cy="76" r="3" fill="var(--ink)"/>
+            <rect x="14" y="62" width="9" height="22" rx="4.5" fill="var(--green-deep)" transform="rotate(-15 18 62)"/>
+            <rect x="81" y="62" width="9" height="22" rx="4.5" fill="var(--green-deep)" transform="rotate(20 86 62)"/>
+            <line x1="90" y1="80" x2="100" y2="66" stroke="#8B5A2B" stroke-width="3" stroke-linecap="round"/>
+            <path d="M100 66 l3 -6 l3 6 l6 1 l-5 4 l1 6 l-5 -3 l-5 3 l1 -6 l-5 -4 Z" fill="var(--yellow)"/>
+            <circle cx="52" cy="38" r="19" fill="#FFE3C2"/>
+            <circle cx="45" cy="40" r="2.4" fill="var(--ink)"/>
+            <circle cx="59" cy="40" r="2.4" fill="var(--ink)"/>
+            <path d="M45 50 Q52 54 59 50" stroke="var(--ink)" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <rect x="33" y="10" width="38" height="10" rx="3" fill="var(--ink)"/>
+            <rect x="38" y="-6" width="28" height="20" rx="2" fill="var(--ink)"/>
+            <rect x="38" y="8" width="28" height="5" fill="var(--pink)"/>
+          </svg>
+        </figure>
+        <!-- 보컬 -->
+        <figure>
+          <svg viewBox="0 0 104 130">
+            <rect x="40" y="90" width="9" height="28" rx="4.5" fill="var(--ink)"/>
+            <rect x="55" y="90" width="9" height="28" rx="4.5" fill="var(--ink)"/>
+            <rect x="30" y="58" width="44" height="40" rx="16" fill="var(--yellow)"/>
+            <rect x="18" y="62" width="9" height="24" rx="4.5" fill="var(--yellow)" transform="rotate(-10 22 62)"/>
+            <rect x="26" y="42" width="9" height="20" rx="4.5" fill="#E9E9E9" transform="rotate(20 30 42)"/>
+            <circle cx="30" cy="40" r="7" fill="#CFCFCF"/>
+            <rect x="77" y="66" width="9" height="24" rx="4.5" fill="var(--yellow)" transform="rotate(15 81 66)"/>
+            <path d="M20 18 q6 -10 4 -18" stroke="var(--pink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+            <circle cx="18" cy="16" r="2.6" fill="var(--pink)"/>
+            <path d="M32 8 q6 -10 4 -18" stroke="var(--pink)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+            <circle cx="30" cy="6" r="2.6" fill="var(--pink)"/>
+            <circle cx="52" cy="38" r="19" fill="#FFE3C2"/>
+            <path d="M33 32 Q52 12 71 32 Q71 22 52 20 Q33 22 33 32" fill="#6B4226"/>
+            <circle cx="45" cy="40" r="2.4" fill="var(--ink)"/>
+            <circle cx="59" cy="40" r="2.4" fill="var(--ink)"/>
+            <ellipse cx="52" cy="50" rx="4" ry="5" fill="var(--ink)"/>
+          </svg>
+        </figure>
+        <!-- 기타리스트 -->
+        <figure>
+          <svg viewBox="0 0 104 130">
+            <rect x="40" y="90" width="9" height="28" rx="4.5" fill="var(--ink)"/>
+            <rect x="55" y="90" width="9" height="28" rx="4.5" fill="var(--ink)"/>
+            <rect x="30" y="58" width="44" height="40" rx="16" fill="var(--green-mid)"/>
+            <ellipse cx="58" cy="88" rx="20" ry="24" fill="#C48A55" transform="rotate(-18 58 88)"/>
+            <ellipse cx="54" cy="70" rx="12" ry="14" fill="#C48A55" transform="rotate(-18 54 70)"/>
+            <circle cx="57" cy="86" r="6" fill="#7A5230"/>
+            <rect x="44" y="40" width="6" height="34" rx="2" fill="#7A5230" transform="rotate(-18 47 57)"/>
+            <rect x="14" y="66" width="9" height="22" rx="4.5" fill="var(--green-mid)" transform="rotate(-30 18 66)"/>
+            <rect x="70" y="52" width="9" height="20" rx="4.5" fill="var(--green-mid)" transform="rotate(35 74 52)"/>
+            <rect x="36" y="14" width="32" height="12" rx="6" fill="var(--pink)"/>
+            <circle cx="52" cy="38" r="19" fill="#FFE3C2"/>
+            <path d="M33 30 Q52 14 71 30 Q71 24 52 22 Q33 24 33 30" fill="#3A2415"/>
+            <circle cx="45" cy="40" r="2.4" fill="var(--ink)"/>
+            <circle cx="59" cy="40" r="2.4" fill="var(--ink)"/>
+            <path d="M45 50 Q52 53 59 50" stroke="var(--ink)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ QUIZ ============ -->
+    <section id="screen-quiz" class="screen hidden">
+      <div class="quiz-top">
+        <div class="progress-labels"><span id="qCounter">Q1 / 12</span><span id="qPercent">진행 상황 8%</span></div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:8%"></div></div>
+        <div class="dots" id="dots"></div>
+      </div>
+      <div style="height:14px;"></div>
+      <div class="q-text"><span class="q-num display" id="qNumBig">Q1.</span><span id="qTextBody"></span></div>
+      <div class="options" id="options"></div>
+      <div class="quiz-bottom">
+        <button class="back-btn" id="backBtn" aria-label="이전 질문">←</button>
+      </div>
+    </section>
+
+    <!-- ============ RESULT ============ -->
+    <section id="screen-result" class="screen hidden">
+      <div class="result-grid">
+        <div>
+          <div class="res-badge" id="resEmoji">🎪</div>
+          <div class="res-tag" id="resTag">당신의 최애 버스킹 취향은</div>
+          <h2 class="res-title display" id="resTitle">흥 폭발! 퍼포먼스 마니아</h2>
+          <p class="res-desc" id="resDesc"></p>
+          <div class="kw-row" id="resKeywords"></div>
+          <div class="score-box">
+            <h4>나의 취향 분포</h4>
+            <div id="scoreRows"></div>
+          </div>
+        </div>
+        <div>
+          <div class="tt-heading">🗓️ <span>당신을 위한 추천 무대</span></div>
+          <div class="tt-sub" id="ttSub">오늘 이 무대는 꼭 챙겨보세요!</div>
+          <div id="timetable"></div>
+          <div class="tt-note">※ 프로그램은 기상 상황 및 출연자 사정 등 현장 상황에 따라 일부 변경 또는 취소될 수 있습니다.</div>
+
+          <div class="share-title">✨ 결과 공유하기</div>
+          <div class="share-row">
+            <button class="share-btn kko" id="kakaoBtn"><span class="e">💬</span>카카오톡 공유</button>
+            <button class="share-btn ig" id="igBtn"><span class="e">📸</span>스토리 이미지 저장</button>
+          </div>
+        </div>
+        <div class="retry-row">
+          <button class="retry-btn" id="retryBtn">🔄 테스트 다시 하기</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="card-modal hidden" id="cardModal">
+  <div class="card-modal-inner">
+    <img id="cardImg" alt="최애 버스킹 취향 테스트 결과 카드">
+    <p>이미지를 <b>길게 눌러 저장</b>한 뒤<br>인스타그램 스토리에 공유해보세요 🎉</p>
+    <button id="closeModalBtn">닫기</button>
+  </div>
+</div>
+
+<canvas id="shareCanvas" width="1080" height="1920" style="display:none;"></canvas>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     1. DATA — 문항 (총 12문항, P/M/I/T 점수 누적)
+     순서: 기존 Q11(발끝 박자)을 Q5 자리로 이동
+     ========================================================= */
+  var QUESTIONS = [
+    {
+      text:"&lt;2026 김포 버스킹 페스티벌&gt; 행사장에 들어서자마자 저 멀리서 관객들의 함성과 박수 소리가 들려옵니다. 당신이 가장 먼저 발걸음을 옮기는 곳은?",
+      options:[
+        {icon:"🎇", label:"시선을 사로잡는 화려한 조명과 사람들의 격렬한 환호가 터져 나오는 곳", d:{P:1,M:1}},
+        {icon:"🎧", label:"아름다운 선율 속 깊은 울림을 느낀 관객들이 열렬히 박수치고 있는 곳", d:{I:1,T:1}}
+      ]
+    },
+    {
+      text:"버스킹 무대를 볼 때 당신이 가장 중요하게 생각하는 요소는?",
+      options:[
+        {icon:"🎪", label:"눈을 떼지 못하게 만드는 무대 매너와 압도적인 볼거리", d:{P:2}},
+        {icon:"🎤", label:"나도 모르게 따라 흥얼거리게 되는 보컬의 목소리와 가사", d:{M:2}},
+        {icon:"🎻", label:"손끝에서 펼쳐지는 정교하고 놀라운 연주 테크닉", d:{I:2}},
+        {icon:"🪘", label:"심금을 울리는 전통음악 특유의 흥과 짙은 감성", d:{T:2}}
+      ]
+    },
+    {
+      text:"공연 중 아티스트가 관객과의 호응을 유도할 때, 당신이 가장 신나는 순간은?",
+      options:[
+        {icon:"🙌", label:"무대 위로 관객을 불러 함께 깜짝 퍼포먼스를 선보일 때", d:{P:2}},
+        {icon:"🎶", label:"익숙한 하이라이트 구간에서 다 함께 목청껏 떼창할 때", d:{M:2}},
+        {icon:"👏", label:"신들린 리듬 연주에 맞춰 손뼉으로 함께 박자를 맞추며 몰입할 때", d:{I:2}},
+        {icon:"📣", label:"“잘한다~”, “좋다!” 등 아티스트와 관객이 주고받는 추임새로 흥이 오를 때", d:{T:2}}
+      ]
+    },
+    {
+      text:"눈을 감고 음악을 감상할 때 당신의 마음을 더 흔드는 소리는?",
+      options:[
+        {icon:"🥁", label:"좌중을 들썩이게 만드는 다이내믹한 비트박스와 리드미컬한 소리", d:{P:2}},
+        {icon:"🎙️", label:"감성을 자극하는 보컬의 호소력 짙은 음색과 감미로운 가사", d:{M:2}},
+        {icon:"🎹", label:"통기타, 바이올린, 건반 등 악기가 연주하는 섬세하고 깊은 멜로디", d:{I:2}},
+        {icon:"🪈", label:"가야금, 해금, 대금 등 가슴 깊은 곳을 찡하게 하면서도 절로 어깨춤이 나는 가락", d:{T:2}}
+      ]
+    },
+    {
+      text:"나도 모르게 발끝으로 박자를 타고 있는 순간은?",
+      options:[
+        {icon:"💥", label:"비트박스나 드럼 리듬에 맞춰 화려한 댄스가 펼쳐질 때", d:{P:2}},
+        {icon:"🎶", label:"신나는 댄스곡이나 유명 K-POP 곡의 하이라이트 부분이 나올 때", d:{M:2}},
+        {icon:"🎻", label:"솔로 기타나 바이올린이 빠른 속도로 정교하게 박자를 쪼개며 연주할 때", d:{I:2}},
+        {icon:"🥁", label:"꽹과리와 장구가 선보이는 빠른 전통음악 장단이 몰아칠 때", d:{T:2}}
+      ]
+    },
+    {
+      text:"이번 &lt;2026 김포 버스킹 페스티벌&gt;에서 가장 기대되는 무대는?",
+      options:[
+        {icon:"🎩", label:"마술, 마임, 관객 참여 퍼포먼스 등 예측 불가능 스펙터클한 무대", d:{P:2}},
+        {icon:"💿", label:"최신 유행곡이나 명곡을 버스커만의 색깔로 재해석한 감성 라이브 무대", d:{M:2}},
+        {icon:"🎺", label:"여러 악기 세션이 완벽한 합을 이루며 펼치는 압도적인 합동 연주 무대", d:{I:2}},
+        {icon:"🥻", label:"우리 전통 음악과 현대 음악이 만나 요즘 감성으로 한국 고유의 멋을 보여주는 퓨전 국악 무대", d:{T:2}}
+      ]
+    },
+    {
+      text:"길을 지나가다 멈춰 서서 계속 보게 되는 버스킹의 특징은?",
+      options:[
+        {icon:"🤸", label:"눈을 뗄 수 없는 신개념 마술과 마임·댄스 등 역동적인 움직임", d:{P:2}},
+        {icon:"🎧", label:"듣는 순간 귀를 사로잡는 대중적이고 매력적인 보컬 톤", d:{M:2}},
+        {icon:"🎼", label:"말 한마디 없이 오직 소리와 연주만으로 좌중을 압도하는 무대", d:{I:2}},
+        {icon:"🔔", label:"신나는 타악기 소리가 울려 퍼지며 잔디광장을 축제의 장으로 만드는 무대", d:{T:2}}
+      ]
+    },
+    {
+      text:"당신이 ‘자유 버스킹 피크닉존’에서 가장 즐기고 싶은 분위기는?",
+      options:[
+        {icon:"🎡", label:"서커스나 마술 무대처럼 즐거움이 넘치는 활기찬 분위기", d:{P:2}},
+        {icon:"🧺", label:"모두가 아는 노래를 함께 들으며 피크닉 돗자리 위에서 다 함께 즐기는 분위기", d:{M:2}},
+        {icon:"🍃", label:"잔잔한 악기 연주를 배경음악 삼아 여유롭게 감상하는 힐링 분위기", d:{I:2}},
+        {icon:"💃", label:"전통 가락의 흥에 겨워 남녀노소 경계 없이 즐겁게 어우러지는 분위기", d:{T:2}}
+      ]
+    },
+    {
+      text:"버스커에게 앵콜을 요청한다면, 요청하고 싶은 앵콜 무대의 타입은?",
+      options:[
+        {icon:"🔥", label:"마지막까지 에너지를 모두 쏟아붓는 화려한 비주얼 퍼포먼스", d:{P:2}},
+        {icon:"💌", label:"오늘 밤 계속 생각날 것 같은 감성 충만한 보컬 노래", d:{M:2}},
+        {icon:"🎸", label:"아티스트의 기량이 극대화된 화려한 솔로 악기 연주", d:{I:2}},
+        {icon:"🕺", label:"관객 전체가 어깨춤을 추며 다 함께 어우러지는 흥겨운 합동 무대", d:{T:2}}
+      ]
+    },
+    {
+      text:"공연이 끝난 뒤 마음 속 가장 오래 남는 잔상은?",
+      options:[
+        {icon:"🌟", label:"무대 위 아티스트의 표정과 무대를 휘어잡던 강렬한 동작", d:{P:2}},
+        {icon:"📻", label:"귓가에 계속 맴도는 멜로디와 입가에 그려지는 가사의 여운", d:{M:2}},
+        {icon:"🎻", label:"손끝의 섬세한 움직임과 악기가 만들어낸 완벽한 하모니", d:{I:2}},
+        {icon:"🌸", label:"가슴 깊은 곳을 울린 여운과 한국적인 선율의 아름다움", d:{T:2}}
+      ]
+    },
+    {
+      text:"친구나 가족에게 “오늘 &lt;2026 김포 버스킹 페스티벌&gt; 진짜 대박 꿀잼이었어!”라고 말할 때 그 이유는?",
+      options:[
+        {icon:"🎊", label:"“볼거리가 정말 다양하고 다채로워서 잠시도 지루할 틈이 없었어!”", d:{P:2}},
+        {icon:"🎵", label:"“내가 좋아하는 노래들을 라이브로 들으니 스트레스가 싹 풀렸어!”", d:{M:2}},
+        {icon:"⚡", label:"“악기 하나로 사람 마음을 들었다 놓았다 하는 연주에 전율이 흘렀어!”", d:{I:2}},
+        {icon:"🇰🇷", label:"“우리 소리와 장단이 이렇게 신나고 멋진지 오늘 새로 알았어!”", d:{T:2}}
+      ]
+    },
+    {
+      text:"페스티벌을 모두 즐긴 후, SNS에 올릴 인증샷을 딱 한 장 남긴다면 어떤 모습일까?",
+      options:[
+        {icon:"🤳", label:"아티스트와 관객이 함께 미소 지으며 신나게 호응한 생기발랄 무대 샷", d:{P:2}},
+        {icon:"🌱", label:"잔디밭에 앉아 무대를 배경으로 감성 돋게 찍은 피크닉 감성 샷", d:{M:2}},
+        {icon:"🌤", label:"하늘을 배경으로 아티스트의 연주 모습을 멋지게 담아낸 감성 포토", d:{I:2}},
+        {icon:"🎁", label:"기념품 혹은 이색 체험 물품을 들고 축제의 흥이 그대로 느껴지게 찍은 인증샷", d:{T:2}}
+      ]
+    }
+  ];
+
+  /* =========================================================
+     2. DATA — Who's NEXT? 2026-27 김포버스커 타임테이블
+     ========================================================= */
+  var SCHEDULE = {
+    A:{ label:"스테이지 A", sub:"아트센터 앞 무대 · 퍼포먼스", slots:[
+      {t:"13:00–13:20", a:"MIK 매직"},
+      {t:"13:20–13:40", a:"새비"},
+      {t:"13:40–14:00", a:"김경호(아코디언킴)"},
+      {t:"14:00–14:20", a:"한국광대"},
+      {t:"14:20–14:40", a:"김민석"},
+      {t:"14:40–15:00", a:"밴드 이상한 술집"},
+      {t:"15:30–15:50", a:"뮤랑극단"},
+      {t:"15:50–16:10", a:"헬로유기농"},
+      {t:"16:10–16:30", a:"알파카어쿠스테이지"},
+      {t:"16:30–16:50", a:"서기석"}
+    ]},
+    B:{ label:"스테이지 B", sub:"잔디광장 데크무대 · 음악", slots:[
+      {t:"13:10–13:30", a:"창작음악집단 두럭"},
+      {t:"13:30–13:50", a:"암행악사"},
+      {t:"13:50–14:10", a:"채움극단"},
+      {t:"14:10–14:30", a:"퀸즈밴드"},
+      {t:"15:40–16:00", a:"유원석"},
+      {t:"16:00–16:20", a:"소리"},
+      {t:"16:20–16:40", a:"김나린"},
+      {t:"16:40–17:00", a:"로로컴퍼니"}
+    ]},
+    C:{ label:"스테이지 C", sub:"행사장 진입로 무대 · 국악", slots:[
+      {t:"13:00–13:20", a:"구각노리"},
+      {t:"13:20–13:40", a:"심각한 개구리"},
+      {t:"13:40–14:00", a:"요들누나 동혜"},
+      {t:"14:00–14:20", a:"기봉"},
+      {t:"14:20–14:40", a:"더 탭댄스 퍼포먼스 컴퍼니"},
+      {t:"14:40–15:00", a:"용용클태 Y2KT"},
+      {t:"15:30–15:50", a:"타미르"},
+      {t:"15:50–16:10", a:"전병철"},
+      {t:"16:10–16:30", a:"아코디언 주연"},
+      {t:"16:30–16:50", a:"클라운쏭"}
+    ]}
+  };
+
+  /* =========================================================
+     3. DATA — 결과 유형
+     ========================================================= */
+  var TYPE_EMOJI = {P:"💃", M:"🎤", I:"🎻", T:"🪘"};
+
+  var RESULT_TYPES = {
+    P:{
+      emoji:TYPE_EMOJI.P, tag:"당신의 최애 버스킹 취향은",
+      title:"흥 폭발! 무대를 찢는 퍼포먼스 마니아",
+      desc:"화려한 조명, 예측 불가능한 볼거리, 관객과 하나 되는 짜릿한 순간까지! 당신은 무대 위에서 펼쳐지는 모든 스펙터클 앞에서 심장이 뛰는 타입이에요. 마술, 서커스, 댄스처럼 시선을 사로잡는 퍼포먼스라면 발걸음을 멈출 수밖에 없죠.",
+      keywords:["#볼거리대장","#관객참여환영","#무대를홀리는사람"],
+      color:"var(--pink)", stages:["A"], curated:null,
+      ttSub:"스테이지 A(아트센터 앞 무대)를 통째로 추천해요! ✨"
+    },
+    M:{
+      emoji:TYPE_EMOJI.M, tag:"당신의 최애 버스킹 취향은",
+      title:"떼창각! 함께 부르는 대중음악 러버",
+      desc:"익숙한 멜로디와 진심을 담은 보컬 앞에서 당신의 하루는 완성돼요. 가요든 팝이든, 함께 목청껏 따라 부를 수 있는 순간이야말로 버스킹의 진짜 매력이라고 생각하는 당신! 오늘도 마이크 앞에 선 아티스트와 눈을 맞추며 떼창할 준비, 되셨나요?",
+      keywords:["#떼창필수","#감성보컬수집가","#피크닉엔노래"],
+      color:"var(--yellow)", stages:["B"], curated:null,
+      ttSub:"스테이지 B(잔디광장 데크무대)를 통째로 추천해요! ✨"
+    },
+    I:{
+      emoji:TYPE_EMOJI.I, tag:"당신의 최애 버스킹 취향은",
+      title:"손끝의 전율, 선율에 빠진 연주 감상가",
+      desc:"화려한 말보다 섬세한 손끝의 움직임에 더 끌리는 당신. 기타, 바이올린, 아코디언이 만들어내는 정교한 선율과 예측 못한 애드리브 앞에서 조용히 몰입하는 타입이에요. 오늘은 눈을 감고 악기 하나가 빚어내는 세계에 흠뻑 빠져보세요.",
+      keywords:["#연주덕후","#몰입감최고","#선율수집가"],
+      color:"var(--green-mid)", stages:["A","B","C"],
+      curated:[["A","13:40–14:00"],["B","15:40–16:00"],["B","16:00–16:20"],["C","16:10–16:30"],["A","16:30–16:50"]],
+      ttSub:"스테이지 곳곳에 숨은 연주 중심 무대만 골라봤어요 ✨"
+    },
+    T:{
+      emoji:TYPE_EMOJI.T, tag:"당신의 최애 버스킹 취향은",
+      title:"얼쑤 좋다! 흥이 넘치는 전통예술 애호가",
+      desc:"꽹과리와 장구 소리만 들리면 심장이 먼저 반응하는 당신! 국악과 풍물, 판소리 특유의 흥과 감성이 어우러진 무대에서 가장 큰 에너지를 느껴요. “얼쑤!”, “좋다!” 추임새 하나로 아티스트와 하나가 되는, 진정한 흥부자입니다.",
+      keywords:["#흥부자","#추임새장인","#우리가락최고"],
+      color:"#C1512F", stages:["C"], curated:null,
+      ttSub:"스테이지 C(행사장 진입로 무대)를 통째로 추천해요! ✨"
+    }
+  };
+  var TYPE_ORDER = ["P","M","I","T"];
+  var TYPE_LABEL = {P:"퍼포먼스", M:"대중음악", I:"악기연주", T:"전통예술"};
+
+  /* =========================================================
+     4. STATE — answers[i] = 선택한 옵션 인덱스 (null = 미응답)
+     ========================================================= */
+  var state = {
+    answers: new Array(QUESTIONS.length).fill(null),
+    scores: {P:0,M:0,I:0,T:0},
+    lastResult: null
+  };
+
+  var els = {
+    start: document.getElementById("screen-start"),
+    quiz: document.getElementById("screen-quiz"),
+    result: document.getElementById("screen-result"),
+    startBtn: document.getElementById("startBtn"),
+    backBtn: document.getElementById("backBtn"),
+    qCounter: document.getElementById("qCounter"),
+    qPercent: document.getElementById("qPercent"),
+    progressFill: document.getElementById("progressFill"),
+    dots: document.getElementById("dots"),
+    qNumBig: document.getElementById("qNumBig"),
+    qTextBody: document.getElementById("qTextBody"),
+    options: document.getElementById("options"),
+    resEmoji: document.getElementById("resEmoji"),
+    resTag: document.getElementById("resTag"),
+    resTitle: document.getElementById("resTitle"),
+    resDesc: document.getElementById("resDesc"),
+    resKeywords: document.getElementById("resKeywords"),
+    scoreRows: document.getElementById("scoreRows"),
+    ttSub: document.getElementById("ttSub"),
+    timetable: document.getElementById("timetable"),
+    retryBtn: document.getElementById("retryBtn"),
+    kakaoBtn: document.getElementById("kakaoBtn"),
+    igBtn: document.getElementById("igBtn"),
+    toast: document.getElementById("toast"),
+    cardModal: document.getElementById("cardModal"),
+    cardImg: document.getElementById("cardImg"),
+    closeModalBtn: document.getElementById("closeModalBtn")
+  };
+
+  function showScreen(name){
+    [els.start, els.quiz, els.result].forEach(function(s){ s.classList.add("hidden"); });
+    els[name].classList.remove("hidden");
+    window.scrollTo(0,0);
+  }
+
+  /* =========================================================
+     5. QUIZ RENDER
+     ========================================================= */
+  function buildDots(){
+    els.dots.innerHTML = "";
+    for(var i=0;i<QUESTIONS.length;i++){
+      var d = document.createElement("div");
+      d.className = "dot";
+      els.dots.appendChild(d);
+    }
+  }
+
+  function renderQuestion(qi){
+    var q = QUESTIONS[qi];
+    els.qCounter.textContent = "Q" + (qi+1) + " / " + QUESTIONS.length;
+    var pct = Math.round((qi/QUESTIONS.length)*100);
+    els.qPercent.textContent = "진행 상황 " + pct + "%";
+    els.progressFill.style.width = pct + "%";
+    els.qNumBig.textContent = "Q" + (qi+1) + ".";
+    els.qTextBody.innerHTML = " " + q.text;
+
+    var dotEls = els.dots.children;
+    for(var k=0;k<dotEls.length;k++){
+      dotEls[k].className = "dot" + (k < qi ? " done" : (k === qi ? " cur" : ""));
+    }
+
+    els.options.innerHTML = "";
+    var letters = ["A","B","C","D"];
+    var selectedIdx = state.answers[qi];
+    q.options.forEach(function(opt, idx){
+      var btn = document.createElement("button");
+      btn.className = "opt" + (selectedIdx === idx ? " selected" : "");
+      btn.innerHTML =
+        '<span class="badge">' + letters[idx] + '</span>' +
+        '<span><span class="icon">' + opt.icon + '</span>' + opt.label + '</span>';
+      btn.addEventListener("click", function(){ chooseOption(qi, idx); });
+      els.options.appendChild(btn);
+    });
+  }
+
+  function chooseOption(qi, idx){
+    state.answers[qi] = idx;
+    for(var j=qi+1;j<state.answers.length;j++){ state.answers[j] = null; }
+    var next = qi + 1;
+    if(next >= QUESTIONS.length){
+      navigate({screen:"result"}, true);
+    } else {
+      navigate({screen:"quiz", q:next}, true);
+    }
+  }
+
+  /* =========================================================
+     6. RESULT
+     ========================================================= */
+  function computeScores(){
+    var s = {P:0,M:0,I:0,T:0};
+    state.answers.forEach(function(optIdx, qi){
+      if(optIdx === null || optIdx === undefined) return;
+      var d = QUESTIONS[qi].options[optIdx].d;
+      Object.keys(d).forEach(function(k){ s[k] += d[k]; });
+    });
+    return s;
+  }
+
+  function computeTopTypes(scores){
+    var max = Math.max.apply(null, TYPE_ORDER.map(function(k){ return scores[k]; }));
+    return TYPE_ORDER.filter(function(k){ return scores[k] === max; });
+  }
+
+  function renderResult(){
+    var scores = computeScores();
+    state.scores = scores;
+    var top = computeTopTypes(scores);
+    var primary = RESULT_TYPES[top[0]];
+    var isTie = top.length > 1 && top.length < 4;
+
+    els.resEmoji.textContent = top.map(function(k){ return RESULT_TYPES[k].emoji; }).join(" ");
+
+    if(!isTie){
+      els.resTag.textContent = primary.tag;
+      els.resTitle.textContent = primary.title;
+      els.resDesc.textContent = primary.desc;
+      els.resKeywords.innerHTML = primary.keywords.map(function(k){ return '<span class="kw">'+k+'</span>'; }).join("");
+      els.ttSub.textContent = primary.ttSub;
+    } else {
+      var names = top.map(function(k){ return TYPE_LABEL[k]+"형"; }).join(" × ");
+      els.resTag.textContent = "당신의 최애 버스킹 취향은 (혼합형)";
+      els.resTitle.textContent = names + " 올라운더";
+      els.resDesc.textContent = top.map(function(k){ return RESULT_TYPES[k].desc; }).join(" ");
+      var kws = [];
+      top.forEach(function(k){ kws = kws.concat(RESULT_TYPES[k].keywords.slice(0,2)); });
+      els.resKeywords.innerHTML = kws.map(function(k){ return '<span class="kw">'+k+'</span>'; }).join("");
+      els.ttSub.textContent = "여러 취향을 골고루 가진 당신을 위해 무대를 두루 추천해요 ✨";
+    }
+
+    var maxScore = Math.max.apply(null, TYPE_ORDER.map(function(k){ return scores[k]; })) || 1;
+    els.scoreRows.innerHTML = TYPE_ORDER.map(function(k){
+      var v = scores[k];
+      var w = Math.max(4, Math.round((v/maxScore)*100));
+      return '<div class="score-row">' +
+        '<span class="lbl">' + TYPE_EMOJI[k] + ' ' + TYPE_LABEL[k] + '형</span>' +
+        '<span class="score-bar-track"><span class="score-bar-fill" style="width:' + w + '%; background:' + RESULT_TYPES[k].color + ';"></span></span>' +
+        '<span class="val">' + v + '</span>' +
+      '</div>';
+    }).join("");
+
+    renderTimetable(isTie ? top : [top[0]]);
+
+    state.lastResult = {
+      isTie: isTie,
+      title: isTie ? (top.map(function(k){return TYPE_LABEL[k]+"형";}).join(" × ") + " 올라운더") : primary.title,
+      emoji: els.resEmoji.textContent
+    };
+  }
+
+  function renderTimetable(topKeys){
+    var html = "";
+    var showStages = [];
+    var curatedSet = {};
+
+    if(topKeys.length === 1 && topKeys[0] !== "I"){
+      showStages = RESULT_TYPES[topKeys[0]].stages;
+    } else {
+      showStages = ["A","B","C"];
+      topKeys.forEach(function(k){
+        var rt = RESULT_TYPES[k];
+        if(rt.curated){
+          rt.curated.forEach(function(pair){ curatedSet[pair[0]+"|"+pair[1]] = true; });
+        } else {
+          rt.stages.forEach(function(s){
+            SCHEDULE[s].slots.forEach(function(slot){ curatedSet[s+"|"+slot.t] = true; });
+          });
+        }
+      });
+    }
+
+    var fullHighlight = (topKeys.length === 1 && topKeys[0] !== "I");
+
+    showStages.forEach(function(stageKey){
+      var st = SCHEDULE[stageKey];
+      html += '<div class="stage-card' + (fullHighlight ? " glow" : "") + '">';
+      html += '<div class="stage-card-head"><span>' + st.label + '</span><span class="g">' + st.sub + '</span></div>';
+      st.slots.forEach(function(slot){
+        var hl = fullHighlight || curatedSet[stageKey+"|"+slot.t];
+        html += '<div class="slot-row' + (hl ? " hl" : "") + '">' +
+          '<span class="t">' + slot.t + '</span>' +
+          '<span class="a">' + slot.a + '</span>' +
+          (hl ? '<span class="star">✨</span>' : '') +
+        '</div>';
+      });
+      html += '</div>';
+    });
+
+    els.timetable.innerHTML = html;
+  }
+
+  /* =========================================================
+     7. SHARE
+     ========================================================= */
+  function showToast(msg){
+    els.toast.textContent = msg;
+    els.toast.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function(){ els.toast.classList.remove("show"); }, 2600);
+  }
+
+  function shareKakao(){
+    var url = location.href;
+    var text = "나의 최애 버스킹 취향은 [" + (state.lastResult ? state.lastResult.title : "") + "]! 너의 취향도 확인해봐 🎪 #2026김포버스킹페스티벌";
+    if(navigator.share){
+      navigator.share({ title:"최애 버스킹 취향 테스트", text:text, url:url }).catch(function(){});
+    } else if(navigator.clipboard){
+      navigator.clipboard.writeText(text + "\n" + url).then(function(){
+        showToast("링크가 복사됐어요! 카카오톡에 붙여넣기 해보세요 💌");
+      }).catch(function(){
+        showToast("공유 링크: " + url);
+      });
+    } else {
+      showToast("공유 링크: " + url);
+    }
+  }
+
+  function roundRect(ctx,x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+  }
+
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight, align){
+    var chars = text.split("");
+    var line = "";
+    var lines = [];
+    for(var n=0;n<chars.length;n++){
+      var test = line + chars[n];
+      if(ctx.measureText(test).width > maxWidth && line !== ""){
+        lines.push(line);
+        line = chars[n];
+      } else {
+        line = test;
+      }
+    }
+    lines.push(line);
+    lines.forEach(function(l, i){
+      ctx.textAlign = align || "center";
+      ctx.fillText(l, x, y + i*lineHeight);
+    });
+    return lines.length;
+  }
+
+  function generateShareImage(){
+    var canvas = document.getElementById("shareCanvas");
+    var ctx = canvas.getContext("2d");
+    var W = canvas.width, H = canvas.height;
+
+    var top = computeTopTypes(state.scores);
+    var primary = RESULT_TYPES[top[0]];
+    var title = state.lastResult ? state.lastResult.title : primary.title;
+    var emoji = state.lastResult ? state.lastResult.emoji : primary.emoji;
+
+    var g = ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,"#1F5C3A");
+    g.addColorStop(.5,"#2F8C4F");
+    g.addColorStop(1,"#8FD14F");
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,W,H);
+
+    var glow = ctx.createRadialGradient(W*0.85,H*0.12,10,W*0.85,H*0.12,320);
+    glow.addColorStop(0,"rgba(255,199,44,.55)");
+    glow.addColorStop(1,"rgba(255,199,44,0)");
+    ctx.fillStyle = glow; ctx.fillRect(0,0,W,H);
+
+    var glow2 = ctx.createRadialGradient(W*0.1,H*0.92,10,W*0.1,H*0.92,320);
+    glow2.addColorStop(0,"rgba(255,79,139,.45)");
+    glow2.addColorStop(1,"rgba(255,79,139,0)");
+    ctx.fillStyle = glow2; ctx.fillRect(0,0,W,H);
+
+    ctx.fillStyle = "#EFFBE9";
+    ctx.font = "700 34px 'Noto Sans KR'";
+    ctx.textAlign = "center";
+    ctx.fillText("2026 김포 버스킹 페스티벌", W/2, 150);
+    ctx.font = "400 26px 'Noto Sans KR'";
+    ctx.fillStyle = "rgba(239,251,233,.85)";
+    ctx.fillText("9.6(일) 13:00–18:00 · 김포아트빌리지", W/2, 195);
+
+    roundRect(ctx, 80, 420, W-160, 1080, 56);
+    ctx.fillStyle = "#FFFBEF";
+    ctx.fill();
+
+    ctx.font = "148px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(emoji, W/2, 640);
+
+    ctx.fillStyle = "#FF4F8B";
+    ctx.font = "700 32px 'Noto Sans KR'";
+    ctx.fillText("나의 최애 버스킹 취향은", W/2, 730);
+
+    ctx.fillStyle = "#173B29";
+    ctx.font = "400 62px 'Jua'";
+    wrapText(ctx, title, W/2, 830, W-280, 78, "center");
+
+    ctx.font = "400 30px 'Noto Sans KR'";
+    ctx.fillStyle = "#3E6B54";
+    wrapText(ctx, "지금 QR로 접속해서 당신의 취향도 확인해보세요!", W/2, 1330, W-320, 42, "center");
+
+    ctx.font = "700 30px 'Noto Sans KR'";
+    ctx.fillStyle = "#EFFBE9";
+    ctx.fillText("#최애버스킹취향테스트  #김포버스킹페스티벌", W/2, 1720);
+    ctx.font = "400 24px 'Noto Sans KR'";
+    ctx.fillStyle = "rgba(239,251,233,.8)";
+    ctx.fillText("주최·주관 (재)김포문화재단", W/2, 1770);
+
+    return canvas.toDataURL("image/png");
+  }
+
+  function shareInstagram(){
+    var ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+    Promise.all([
+      document.fonts.load("400 62px 'Jua'"),
+      document.fonts.load("700 34px 'Noto Sans KR'"),
+      ready
+    ]).then(function(){
+      var dataUrl = generateShareImage();
+      els.cardImg.src = dataUrl;
+      els.cardModal.classList.remove("hidden");
+    }).catch(function(){
+      var dataUrl = generateShareImage();
+      els.cardImg.src = dataUrl;
+      els.cardModal.classList.remove("hidden");
+    });
+  }
+
+  /* =========================================================
+     8. NAVIGATION — History API (모바일 뒤로가기 대응)
+     ========================================================= */
+  function applyTarget(target){
+    if(!target || target.screen === "start"){
+      showScreen("start");
+    } else if(target.screen === "quiz"){
+      renderQuestion(target.q || 0);
+      showScreen("quiz");
+    } else if(target.screen === "result"){
+      renderResult();
+      showScreen("result");
+    }
+  }
+
+  function navigate(target, push){
+    applyTarget(target);
+    if(push){ history.pushState(target, ""); }
+  }
+
+  window.addEventListener("popstate", function(e){
+    applyTarget(e.state || {screen:"start"});
+  });
+
+  function goHome(){
+    state.answers = new Array(QUESTIONS.length).fill(null);
+    navigate({screen:"start"}, true);
+  }
+
+  /* =========================================================
+     9. WIRE UP
+     ========================================================= */
+  els.startBtn.addEventListener("click", function(){ navigate({screen:"quiz", q:0}, true); });
+  els.backBtn.addEventListener("click", function(){ history.back(); });
+  els.retryBtn.addEventListener("click", goHome);
+  els.kakaoBtn.addEventListener("click", shareKakao);
+  els.igBtn.addEventListener("click", shareInstagram);
+  els.closeModalBtn.addEventListener("click", function(){ els.cardModal.classList.add("hidden"); });
+  els.cardModal.addEventListener("click", function(e){ if(e.target === els.cardModal) els.cardModal.classList.add("hidden"); });
+
+  buildDots();
+  history.replaceState({screen:"start"}, "");
+  showScreen("start");
+})();
+</script>
+</body>
+</html>
