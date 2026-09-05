@@ -79,7 +79,7 @@
   /* ---------- floating decorations ---------- */
   .deco{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
   .deco span{
-    position:absolute; font-size:30px; opacity:.5; filter:drop-shadow(0 4px 6px rgba(0,0,0,.15));
+    position:absolute; font-size:39px; opacity:.5; filter:drop-shadow(0 4px 6px rgba(0,0,0,.15));
     animation:bob 7s ease-in-out infinite;
   }
   @keyframes bob{
@@ -91,30 +91,30 @@
   /* ---------- app frame (landscape) ---------- */
   .stage{
     position:relative; z-index:1;
-    width:100%; max-width:1140px;
+    width:100%; max-width:1320px;
     min-height:100dvh;
-    padding:20px 14px 30px;
+    padding:14px 16px 18px;
     display:flex; flex-direction:column;
   }
-  .brand-row{ display:flex; align-items:center; gap:8px; color:#EFFBE9; margin-bottom:14px; }
+  .brand-row{ display:flex; align-items:center; gap:10px; color:#EFFBE9; margin-bottom:10px; }
   .brand-badge{
-    width:30px;height:30px;border-radius:50%; background:var(--cream);
-    display:flex; align-items:center; justify-content:center; font-size:16px; flex:none;
+    width:36px;height:36px;border-radius:50%; background:var(--cream);
+    display:flex; align-items:center; justify-content:center; font-size:19px; flex:none;
     box-shadow:0 2px 6px rgba(0,0,0,.2);
   }
-  .brand-row .name{ font-weight:700; font-size:13px; letter-spacing:.02em; }
+  .brand-row .name{ font-weight:700; font-size:18px; letter-spacing:.02em; }
   .brand-row .name b{ font-family:'Jua'; font-weight:400; }
-  .brand-row .date{ margin-left:auto; font-size:11px; background:rgba(255,255,255,.18); padding:4px 9px; border-radius:999px; }
+  .brand-row .date{ margin-left:auto; font-size:15.6px; background:rgba(255,255,255,.18); padding:6px 13px; border-radius:999px; }
 
   .card{
     background:var(--cream);
     border-radius:30px;
     box-shadow:0 22px 44px var(--shadow), 0 2px 0 rgba(255,255,255,.6) inset;
-    padding:30px 34px 28px;
+    padding:26px 40px 24px;
     flex:1;
     display:flex; flex-direction:column;
     position:relative;
-    overflow:hidden;
+    overflow-x:hidden; overflow-y:auto;
   }
   .card::before{
     content:""; position:absolute; top:-90px; right:-90px; width:220px; height:220px; border-radius:50%;
@@ -130,40 +130,42 @@
   }
 
   /* ---------- start screen ---------- */
-  .start-grid{ display:flex; flex-direction:column; align-items:center; text-align:center; }
+  /* 시작하기 버튼이 화면 중앙 정도에 오도록, 일러스트 퍼레이드 박스는 항상 카드 맨 아래에 붙도록
+     start-grid가 남는 세로 공간을 모두 차지하면서 그 안에서 내용을 세로 중앙 정렬합니다. */
+  .start-grid{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
   .start-col{ display:flex; flex-direction:column; align-items:center; width:100%; }
 
   .start-eyebrow{
     display:inline-flex; align-self:flex-start; align-items:center; gap:6px; background:var(--green-deep); color:#EFFBE9;
-    font-size:11.5px; font-weight:700; letter-spacing:.03em; padding:6px 12px; border-radius:999px; margin-bottom:14px;
+    font-size:19.5px; font-weight:700; letter-spacing:.03em; padding:9px 20px; border-radius:999px; margin-bottom:10px;
   }
-  .start-title{ font-size:30px; line-height:1.28; color:var(--green-deep); margin-bottom:14px; }
+  .start-title{ font-size:52px; line-height:1.24; color:var(--green-deep); margin-bottom:10px; }
   .start-title .hl{ color:var(--pink); }
-  .start-sub{ font-size:14.5px; color:var(--ink-soft); line-height:1.75; margin-bottom:22px; max-width:560px; }
+  .start-sub{ font-size:24px; color:var(--ink-soft); line-height:1.55; margin-bottom:18px; max-width:960px; }
   .start-sub b{ color:var(--green-deep); }
   .cta{
     border:none; cursor:pointer; background:linear-gradient(135deg, var(--pink), #ff7aa8);
-    color:#fff; font-weight:700; font-size:17px; padding:16px 26px; border-radius:18px;
+    color:#fff; font-weight:700; font-size:29px; padding:20px 44px; border-radius:24px;
     box-shadow:0 10px 22px rgba(255,79,139,.4);
     display:inline-flex; align-items:center; justify-content:center; gap:8px;
     transition:transform .15s ease;
-    margin-bottom:22px;
+    margin-bottom:18px;
   }
   .cta:active{ transform:scale(.97); }
 
   .fest-info{
-    background:#fff; border:1.5px dashed var(--line); border-radius:18px; padding:18px 20px;
-    font-size:13px; color:var(--ink-soft); line-height:1.95; text-align:left;
-    max-width:440px; width:100%;
+    background:#fff; border:1.5px dashed var(--line); border-radius:20px; padding:18px 30px;
+    font-size:21px; color:var(--ink-soft); line-height:1.5; text-align:left;
+    max-width:820px; width:100%;
   }
   .fest-info b{ color:var(--green-deep); }
 
   .parade{
-    margin-top:26px; border-radius:22px; overflow:hidden; position:relative;
+    margin-top:12px; border-radius:22px; overflow:hidden; position:relative;
     background:linear-gradient(180deg, #F5F0DC 0%, #EAE3C6 100%);
-    padding:14px 18px 0;
+    padding:12px 22px 0;
     display:flex; align-items:flex-end; justify-content:space-evenly; gap:6px;
-    min-height:140px;
+    min-height:130px;
   }
   .parade::after{
     content:""; position:absolute; left:0; right:0; bottom:0; height:14px;
@@ -175,106 +177,149 @@
   .parade figure:nth-child(4){ animation-delay:1.2s; }
   @keyframes paradeBob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-6px); } }
   @media (prefers-reduced-motion:reduce){ .parade figure{ animation:none; } }
-  .parade svg{ display:block; width:76px; height:96px; }
+  .parade svg{ display:block; width:66px; height:84px; }
   @media (max-width:760px){ .parade svg{ width:58px; height:74px; } .parade{ gap:2px; } }
 
   /* ---------- quiz screen ---------- */
-  .quiz-top{ margin-bottom:18px; }
-  .progress-labels{ display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:var(--green-deep); margin-bottom:6px; }
-  .progress-track{ height:9px; background:#EDE8D2; border-radius:999px; overflow:hidden; }
+  .quiz-top{ margin-bottom:22px; }
+  .quiz-body{ flex:1; display:flex; flex-direction:column; justify-content:center; min-height:0; }
+  .progress-labels{ display:flex; justify-content:space-between; font-size:22.5px; font-weight:700; color:var(--green-deep); margin-bottom:12px; }
+  .progress-track{ height:17px; background:#EDE8D2; border-radius:999px; overflow:hidden; }
   .progress-fill{ display:block; height:100%; border-radius:999px; background:linear-gradient(90deg, var(--yellow), var(--pink)); transition:width .35s ease; }
-  .dots{ display:flex; gap:4px; margin-top:9px; flex-wrap:wrap; }
-  .dot{ width:9px;height:9px;border-radius:50%; background:#E3DFC9; transition:background .2s; }
+  .dots{ display:flex; gap:9px; margin-top:16px; flex-wrap:wrap; }
+  .dot{ width:21px;height:21px;border-radius:50%; background:#E3DFC9; transition:background .2s; }
   .dot.done{ background:var(--pink); }
-  .dot.cur{ background:var(--yellow); box-shadow:0 0 0 3px rgba(255,199,44,.35); }
+  .dot.cur{ background:var(--yellow); box-shadow:0 0 0 5px rgba(255,199,44,.35); }
 
-  .q-text{ font-size:20px; font-weight:700; line-height:1.55; color:var(--green-deep); margin-bottom:20px; max-width:760px; }
-  .q-text.wide-wrap{ max-width:912px; }
-  .q-num{ color:var(--pink); font-family:'Jua'; margin-right:4px; }
+  /* q-num("Q1.")과 질문 본문을 가로 배치해, 문장이 여러 줄로 나뉠 때도 둘째 문장부터
+     첫 문장이 시작한 위치(= "Q1. " 만큼)에 맞춰 자동으로 들여쓰기 되도록 합니다(행잉 인덴트). */
+  .q-text{ display:flex; align-items:flex-start; gap:10px; font-size:36px; font-weight:700; line-height:1.55; color:var(--green-deep); margin-bottom:36px; max-width:1150px; }
+  .q-text.wide-wrap{ max-width:1320px; }
+  .q-num{ flex:none; color:var(--pink); font-family:'Jua'; }
+  #qTextBody{ flex:1; min-width:0; }
 
-  .options{ display:grid; grid-template-columns:1fr; gap:12px; }
+  .options{ display:grid; grid-template-columns:1fr; gap:22px; }
   .opt{
     position:relative; text-align:left; border:2px solid var(--line); background:#fff;
-    border-radius:18px; padding:14px 16px; cursor:pointer;
-    display:flex; align-items:flex-start; gap:11px; font-size:14px; line-height:1.5; color:var(--ink);
+    border-radius:26px; padding:26px 30px; cursor:pointer;
+    display:flex; align-items:flex-start; gap:19px; font-size:27px; line-height:1.5; color:var(--ink);
     transition:border-color .15s, background .15s, transform .1s;
   }
   .opt:hover{ border-color:var(--green-bright); background:#F5FBEF; }
   .opt:active{ transform:scale(.985); }
   .opt .badge{
-    flex:none; width:28px;height:28px;border-radius:50%; background:var(--green-deep); color:#fff;
-    font-family:'Jua'; display:flex; align-items:center; justify-content:center; font-size:13px; transition:background .15s;
+    flex:none; width:51px;height:51px;border-radius:50%; background:var(--green-deep); color:#fff;
+    font-family:'Jua'; display:flex; align-items:center; justify-content:center; font-size:22.5px; transition:background .15s;
   }
-  .opt .icon{ font-size:17px; margin-right:2px; }
+  .opt .icon{ font-size:32px; margin-right:2px; }
   .opt.selected{ border-color:var(--pink); background:#FFF3F7; box-shadow:0 0 0 2px rgba(255,79,139,.25) inset; }
   .opt.selected .badge{ background:var(--pink); }
   .opt.selected::after{
-    content:"✓"; position:absolute; top:10px; right:12px; color:var(--pink); font-weight:900; font-size:15px;
+    content:"✓"; position:absolute; top:16px; right:20px; color:var(--pink); font-weight:900; font-size:24px;
   }
 
-  .quiz-bottom{ margin-top:auto; padding-top:18px; display:flex; justify-content:flex-start; }
+  .quiz-bottom{ margin-top:auto; padding-top:20px; display:flex; justify-content:flex-start; }
   .back-btn{
-    width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line); background:#fff; color:var(--ink-soft);
-    font-size:17px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    width:69px;height:69px;border-radius:50%;border:1.5px solid var(--line); background:#fff; color:var(--ink-soft);
+    font-size:30px; cursor:pointer; display:flex; align-items:center; justify-content:center;
   }
   .back-btn:hover{ border-color:var(--green-bright); }
 
   /* ---------- result screen ---------- */
-  .result-grid{ display:grid; grid-template-columns:1fr 1fr; gap:34px; align-items:start; }
-  @media (max-width:760px){ .result-grid{ grid-template-columns:1fr; gap:22px; } }
+  /* minmax(0,1fr): 그리드 칸이 안의 표(min-width 지정됨) 때문에 페이지 전체가 옆으로 밀리지 않고,
+     표 자체만 tt-table-wrap의 overflow-x:auto로 좁은 화면에서 가로 스크롤되게 합니다. */
+  .result-grid{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:40px; align-items:start; }
+  @media (max-width:760px){ .result-grid{ grid-template-columns:minmax(0,1fr); gap:26px; } }
 
-  .res-badge{ font-size:56px; line-height:1; margin-bottom:6px; }
-  .res-tag{ font-size:12.5px; font-weight:700; color:var(--pink); margin-bottom:6px; }
-  .res-title{ font-size:24px; color:var(--green-deep); line-height:1.35; margin-bottom:10px; }
-  .res-desc{ font-size:13.5px; line-height:1.8; color:var(--ink-soft); margin-bottom:14px; }
-  .kw-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:18px; }
-  .kw{ background:#EFF7E9; color:var(--green-deep); font-size:11.5px; font-weight:700; padding:5px 11px; border-radius:999px; }
-
-  .score-box{ background:#fff; border-radius:16px; padding:16px 17px; border:1.5px solid var(--line); }
-  .score-box h4{ font-size:12px; color:var(--ink-soft); margin-bottom:11px; font-weight:700; }
-  .score-row{ display:flex; align-items:center; gap:8px; margin-bottom:9px; font-size:11.5px; }
-  .score-row:last-child{ margin-bottom:0; }
-  .score-row .lbl{ width:88px; flex:none; font-weight:700; color:var(--ink); display:flex; align-items:center; gap:5px; }
-  .score-bar-track{ flex:1; height:9px; background:#EDE8D2; border-radius:999px; overflow:hidden; }
-  .score-bar-fill{ display:block; height:100%; border-radius:999px; }
-  .score-row .val{ width:22px; text-align:right; font-weight:700; color:var(--ink-soft); flex:none; }
-
-  .tt-heading{ font-size:15px; font-weight:700; color:var(--green-deep); margin-bottom:4px; display:flex; align-items:center; gap:6px; }
-  .tt-sub{ font-size:11.5px; color:var(--ink-soft); margin-bottom:10px; }
-  .stage-card{ border-radius:16px; border:1.5px solid var(--line); background:#fff; margin-bottom:12px; overflow:hidden; }
-  .stage-card.glow{ border-color:var(--yellow); box-shadow:0 0 0 3px rgba(255,199,44,.28); }
-  .stage-card-head{
-    background:var(--green-deep); color:#fff; font-size:12.5px; font-weight:700; padding:8px 12px;
-    display:flex; justify-content:space-between; align-items:center;
+  .res-badge{ font-size:68px; line-height:1; margin-bottom:22px; }
+  .res-tag{ font-size:15px; font-weight:700; color:var(--pink); margin-bottom:8px; }
+  .res-title{ font-size:29px; color:var(--green-deep); line-height:1.35; margin-bottom:12px; word-break:keep-all; }
+  @media (max-width:760px){ .res-title{ max-width:70vw; } }
+  .res-desc{ font-size:14.9px; line-height:1.8; color:var(--ink-soft); margin-bottom:16px; }
+  .kw-row{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom:20px; }
+  .kw{ background:#EFF7E9; color:var(--green-deep); font-size:12.7px; font-weight:700; padding:6px 13px; border-radius:999px; }
+  @media (min-width:900px){
+    .res-desc{ font-size:16.2px; }
+    .kw{ font-size:13.8px; }
   }
-  .stage-card-head span.g{ font-weight:400; opacity:.85; font-size:11px; }
-  .slot-row{ display:flex; gap:9px; align-items:center; padding:7px 12px; font-size:12px; border-top:1px solid #F1EEDC; color:var(--ink-soft); }
-  .slot-row .t{ flex:none; width:80px; font-variant-numeric:tabular-nums; color:var(--ink); font-weight:700; font-size:11px; }
-  .slot-row .a{ flex:1; }
-  .slot-row.hl{
-    background:linear-gradient(90deg, rgba(255,199,44,.22), rgba(255,79,139,.14)); color:var(--ink); font-weight:700;
+
+  .score-box{ background:#fff; border-radius:18px; padding:28px 32px; border:1.5px solid var(--line); }
+  .score-box h4{ font-size:32px; color:var(--ink-soft); margin-bottom:22px; font-weight:700; }
+  .score-row{ display:flex; align-items:center; gap:14px; margin-bottom:18px; font-size:29px; }
+  .score-row:last-child{ margin-bottom:0; }
+  .score-row .lbl{ width:190px; flex:none; font-weight:700; color:var(--ink); display:flex; align-items:center; gap:7px; }
+  .score-bar-track{ flex:1; min-width:0; width:190px; height:14px; background:#EDE8D2; border-radius:999px; overflow:hidden; }
+  .score-bar-fill{ display:block; height:100%; border-radius:999px; }
+  .score-row .val{ width:50px; text-align:right; font-weight:700; color:var(--ink-soft); flex:none; }
+  @media (max-width:760px){
+    .score-box{ padding:20px 18px; }
+    .score-row{ gap:8px; font-size:22px; }
+    .score-row .lbl{ width:120px; gap:4px; font-size:19px; }
+    .score-bar-track{ width:auto; height:12px; }
+    .score-row .val{ width:34px; }
+  }
+
+  .tt-heading{ font-size:21.5px; font-weight:700; color:var(--green-deep); margin-bottom:7px; display:flex; align-items:center; gap:6px; }
+  .tt-sub{ font-size:16.5px; color:var(--ink-soft); margin-bottom:15px; }
+  @media (min-width:900px){
+    .tt-heading{ font-size:23.5px; }
+    .tt-sub{ font-size:18px; }
+  }
+
+  .tt-table-wrap{ overflow-x:auto; border-radius:16px; border:1.5px solid var(--line); }
+  .tt-table{ width:100%; border-collapse:collapse; background:#fff; min-width:520px; }
+  .tt-table th, .tt-table td{ border:1px solid #F1EEDC; }
+  .tt-cat-row th{
+    background:var(--green-deep); color:#fff; font-size:15.6px; font-weight:700; padding:9px 6px; text-align:center; line-height:1.5;
+  }
+  .tt-cat-row th.tt-timecol{ background:var(--green-deep); }
+  .tt-stage-row th{
+    background:#EFF7E9; color:var(--green-deep); font-size:16.5px; font-weight:700; padding:9px 6px; text-align:center; line-height:1.5;
+  }
+  .tt-stage-row th span{ display:block; font-weight:400; font-size:13.7px; color:var(--ink-soft); }
+  .tt-table td.tt-timecol{
+    background:#FAF7EA; color:var(--ink); font-weight:700; font-size:16.5px; text-align:center; white-space:nowrap; padding:8px 8px; vertical-align:middle;
+  }
+  .tt-stagecell{ padding:8px; vertical-align:top; }
+  /* 시간과 출연진 이름을 한 줄에 나란히 두면 좁은 칸에서 이름이 한 글자씩 세로로
+     쪼개져 보이는 문제가 있어, 참고 이미지처럼 시간 – 이름을 위아래로 쌓는 구조로 배치합니다.
+     word-break:keep-all로 한글 단어 중간이 잘리지 않게 합니다. */
+  .tt-chip{
+    display:flex; flex-direction:column; gap:2px; padding:7px 9px; border-radius:10px; font-size:17.2px; color:var(--ink-soft);
+    margin-bottom:6px; line-height:1.35; word-break:keep-all; overflow-wrap:break-word;
+  }
+  .tt-chip:last-child{ margin-bottom:0; }
+  .tt-chip .t{ font-variant-numeric:tabular-nums; font-weight:700; color:var(--ink); font-size:15px; white-space:nowrap; }
+  .tt-chip .a{ display:block; }
+  .tt-chip.hl{
+    background:linear-gradient(90deg, rgba(255,199,44,.28), rgba(255,79,139,.18)); color:var(--ink); font-weight:700;
     animation:pulseRow 1.6s ease-in-out infinite;
   }
-  @keyframes pulseRow{ 0%,100%{ box-shadow: inset 0 0 0 0 rgba(255,199,44,0); } 50%{ box-shadow: inset 0 0 0 999px rgba(255,199,44,.14); } }
-  @media (prefers-reduced-motion:reduce){ .slot-row.hl{ animation:none; } }
-  .slot-row .star{ flex:none; font-size:12px; }
+  @keyframes pulseRow{ 0%,100%{ box-shadow: inset 0 0 0 0 rgba(255,199,44,0); } 50%{ box-shadow: inset 0 0 0 999px rgba(255,199,44,.16); } }
+  @media (prefers-reduced-motion:reduce){ .tt-chip.hl{ animation:none; } }
+  .tt-chip .star{ flex:none; font-size:15px; }
+  @media (min-width:900px){
+    .tt-chip{ font-size:18.7px; }
+    .tt-chip .t{ font-size:16.25px; }
+  }
 
-  .tt-note{ font-size:10.5px; color:var(--ink-soft); opacity:.85; margin:2px 0 18px; line-height:1.6; }
+  .tt-note{ font-size:13px; color:var(--ink-soft); opacity:.85; margin:8px 0 0; line-height:1.6; }
 
-  .share-title{ font-size:13px; font-weight:700; color:var(--green-deep); margin-bottom:9px; }
-  .share-row{ display:flex; gap:9px; margin-bottom:6px; }
+  .share-title{ font-size:15px; font-weight:700; color:var(--green-deep); margin:20px 0 11px; }
+  .share-row{ display:flex; gap:11px; margin-bottom:6px; }
   .share-btn{
-    flex:1; border:none; cursor:pointer; border-radius:15px; padding:13px 8px; font-weight:700; font-size:12.5px;
-    display:flex; flex-direction:column; align-items:center; gap:4px; color:#fff;
+    flex:1; border:none; cursor:pointer; border-radius:16px; padding:16px 10px; font-weight:700; font-size:15px;
+    display:flex; flex-direction:column; align-items:center; gap:5px; color:#fff;
   }
   .share-btn.phone{ background:linear-gradient(135deg, var(--green-deep), var(--green-mid)); }
-  .share-btn.ig{ background:linear-gradient(135deg,#F58529,#DD2A7B 45%,#8134AF 75%,#515BD4); }
-  .share-btn .e{ font-size:20px; }
+  .share-btn.ig{ background:linear-gradient(135deg,#FFB13C,#FF6F3C); }
+  .share-btn.sns{ background:linear-gradient(135deg,#F58529,#DD2A7B 45%,#8134AF 75%,#515BD4); }
+  .share-btn .e{ font-size:24px; }
 
-  .retry-row{ grid-column:1 / -1; display:flex; justify-content:center; margin-top:6px; }
+  .retry-row{ grid-column:1 / -1; display:flex; justify-content:center; margin-top:10px; }
   .retry-btn{
-    border:1.6px solid var(--green-deep); background:#fff; color:var(--green-deep); font-weight:700; font-size:13.5px;
-    padding:12px 28px; border-radius:14px; cursor:pointer;
+    border:1.6px solid var(--green-deep); background:#fff; color:var(--green-deep); font-weight:700; font-size:16px;
+    padding:14px 32px; border-radius:15px; cursor:pointer;
   }
 
   .toast{
@@ -289,16 +334,20 @@
     padding:20px; backdrop-filter:blur(2px);
   }
   .card-modal.hidden{ display:none; }
-  .card-modal-inner{ max-width:320px; width:100%; text-align:center; }
+  .card-modal-inner{ max-width:340px; width:100%; text-align:center; }
   .card-modal img{ width:100%; border-radius:20px; box-shadow:0 20px 50px rgba(0,0,0,.4); }
-  .card-modal p{ color:#fff; font-size:12.5px; margin:14px 0; line-height:1.6; }
-  .card-modal button{ border:none; background:#fff; color:var(--ink); font-weight:700; font-size:13px; padding:10px 20px; border-radius:999px; cursor:pointer; }
+  .card-modal p{ color:#fff; font-size:15px; margin:16px 0; line-height:1.6; }
+  .card-modal .btn-row{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+  .card-modal button{ border:none; background:#fff; color:var(--ink); font-weight:700; font-size:15.6px; padding:12px 22px; border-radius:999px; cursor:pointer; }
 
   .qr-wrap{
-    background:#fff; border-radius:20px; padding:18px; box-shadow:0 20px 50px rgba(0,0,0,.4);
+    background:#fff; border-radius:26px; padding:30px; box-shadow:0 20px 50px rgba(0,0,0,.4);
     display:flex; align-items:center; justify-content:center;
   }
-  .qr-wrap svg{ display:block; width:220px; height:220px; }
+  .qr-wrap svg{ display:block; width:528px; height:528px; }
+  #qrModal .card-modal-inner{ max-width:640px; }
+  #qrModal p{ font-size:30px; line-height:1.7; }
+  #qrModal button{ font-size:22px; padding:15px 28px; }
 </style>
 </head>
 <body>
@@ -306,8 +355,8 @@
   <span style="top:6%; left:6%; animation-delay:0s;">🎵</span>
   <span style="top:12%; right:8%; animation-delay:1.2s;">🎸</span>
   <span style="top:70%; right:5%; animation-delay:.6s;">🥁</span>
-  <span style="top:84%; left:10%; animation-delay:1.8s; font-size:24px;">🌼</span>
-  <span style="top:32%; right:20%; animation-delay:2.6s; font-size:22px;">🎶</span>
+  <span style="top:84%; left:10%; animation-delay:1.8s; font-size:31px;">🌼</span>
+  <span style="top:32%; right:20%; animation-delay:2.6s; font-size:29px;">🎶</span>
 </div>
 
 <div class="stage">
@@ -437,9 +486,10 @@
         <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:8%"></div></div>
         <div class="dots" id="dots"></div>
       </div>
-      <div style="height:14px;"></div>
-      <div class="q-text" id="qTextWrap"><span class="q-num display" id="qNumBig">Q1.</span><span id="qTextBody"></span></div>
-      <div class="options" id="options"></div>
+      <div class="quiz-body">
+        <div class="q-text" id="qTextWrap"><span class="q-num display" id="qNumBig">Q1.</span><span id="qTextBody"></span></div>
+        <div class="options" id="options"></div>
+      </div>
       <div class="quiz-bottom">
         <button class="back-btn" id="backBtn" aria-label="이전 질문">←</button>
       </div>
@@ -450,7 +500,7 @@
       <div class="result-grid">
         <div>
           <div class="res-badge" id="resEmoji">🎪</div>
-          <div class="res-tag" id="resTag">당신의 최애 버스킹 취향은</div>
+          <div class="res-tag" id="resTag">당신의 최애 버스킹 취향은!</div>
           <h2 class="res-title display" id="resTitle">흥 폭발! 퍼포먼스 마니아</h2>
           <p class="res-desc" id="resDesc"></p>
           <div class="kw-row" id="resKeywords"></div>
@@ -458,21 +508,22 @@
             <h4>나의 취향 분포</h4>
             <div id="scoreRows"></div>
           </div>
-        </div>
-        <div>
-          <div class="tt-heading">🗓️ <span>당신을 위한 추천 무대</span></div>
-          <div class="tt-sub" id="ttSub">오늘 이 무대는 꼭 챙겨보세요!</div>
-          <div id="timetable"></div>
-          <div class="tt-note">※ 프로그램은 기상 상황 및 출연자 사정 등 현장 상황에 따라 일부 변경 또는 취소될 수 있습니다.</div>
 
           <div class="share-title">✨ 결과 공유하기</div>
           <div class="share-row">
             <button class="share-btn phone hidden" id="phoneBtn"><span class="e">📱</span>내 폰으로 결과 받기</button>
-            <button class="share-btn ig hidden" id="igBtn"><span class="e">📸</span>스토리 이미지 저장</button>
+            <button class="share-btn ig hidden" id="igBtn"><span class="e">📥</span>결과 이미지 저장</button>
+            <button class="share-btn sns hidden" id="snsBtn"><span class="e">📤</span>SNS에 공유하기</button>
           </div>
         </div>
+        <div>
+          <div class="tt-heading">🗓️ <span>당신을 위한 추천 무대</span></div>
+          <div class="tt-sub" id="ttSub">오늘 이 무대는 꼭 챙겨보세요!</div>
+          <div class="tt-table-wrap"><table class="tt-table" id="timetable"></table></div>
+          <div class="tt-note">※ 프로그램은 기상 상황 및 출연자 사정 등 현장 상황에 따라 일부 변경 또는 취소될 수 있습니다.</div>
+        </div>
         <div class="retry-row">
-          <button class="retry-btn" id="retryBtn">🔄 테스트 다시 하기</button>
+          <button class="retry-btn hidden" id="retryBtn">🔄 테스트 다시 하기</button>
         </div>
       </div>
     </section>
@@ -485,8 +536,10 @@
 <div class="card-modal hidden" id="cardModal">
   <div class="card-modal-inner">
     <img id="cardImg" alt="최애 버스킹 취향 테스트 결과 카드">
-    <p>이미지를 <b>길게 눌러 저장</b>한 뒤<br>인스타그램 스토리에 공유해보세요 🎉</p>
-    <button id="closeModalBtn">닫기</button>
+    <p>아래 버튼을 누르면 이미지가 저장돼요!<br>저장한 카드를 SNS에 공유해보세요 🎉</p>
+    <div class="btn-row">
+      <button id="downloadCloseBtn">📥 다운로드 후 닫기</button>
+    </div>
   </div>
 </div>
 
@@ -662,6 +715,23 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     ]}
   };
 
+  /* 추천 무대 표를 "시간대 블록 × 스테이지 A/B/C" 형태로 그리기 위해
+     각 스테이지의 슬롯을 시작 시각의 시(hour) 단위로 미리 묶어둡니다. */
+  var STAGE_KEYS = ["A","B","C"];
+  var HOUR_BUCKETS = (function(){
+    var byHour = {};
+    STAGE_KEYS.forEach(function(sk){
+      SCHEDULE[sk].slots.forEach(function(slot){
+        var hour = slot.t.split(/[–-]/)[0].split(":")[0];
+        if(!byHour[hour]) byHour[hour] = {A:[],B:[],C:[]};
+        byHour[hour][sk].push(slot);
+      });
+    });
+    return Object.keys(byHour).sort(function(a,b){ return +a - +b; }).map(function(h){
+      return { hour:h, stages:byHour[h] };
+    });
+  })();
+
   /* =========================================================
      3. DATA — 결과 유형
      ========================================================= */
@@ -669,41 +739,46 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 
   var RESULT_TYPES = {
     P:{
-      emoji:TYPE_EMOJI.P, tag:"당신의 최애 버스킹 취향은",
+      emoji:TYPE_EMOJI.P, tag:"당신의 최애 버스킹 취향은!",
       title:"흥 폭발! 무대를 찢는 퍼포먼스 마니아",
       desc:"화려한 조명, 예측 불가능한 볼거리, 관객과 하나 되는 짜릿한 순간까지! 당신은 무대 위에서 펼쳐지는 모든 스펙터클 앞에서 심장이 뛰는 타입이에요. 마술, 서커스, 댄스처럼 시선을 사로잡는 퍼포먼스라면 발걸음을 멈출 수밖에 없죠.",
       keywords:["#볼거리대장","#관객참여환영","#무대를홀리는사람"],
-      color:"var(--pink)", stages:["A"], curated:null,
-      ttSub:"스테이지 A(아트센터 앞 무대)를 통째로 추천해요! ✨"
+      color:"var(--pink)",
+      recommend:{ A:["MIK 매직","한국광대","서기석"], B:["채움극단","유원석"], C:["더 탭댄스 퍼포먼스 컴퍼니","클라운쏭"] },
+      ttSub:"반짝이는 자리가 당신을 위한 무대예요! ✨"
     },
     M:{
-      emoji:TYPE_EMOJI.M, tag:"당신의 최애 버스킹 취향은",
+      emoji:TYPE_EMOJI.M, tag:"당신의 최애 버스킹 취향은!",
       title:"떼창각! 함께 부르는 대중음악 러버",
       desc:"익숙한 멜로디와 진심을 담은 보컬 앞에서 당신의 하루는 완성돼요. 가요든 팝이든, 함께 목청껏 따라 부를 수 있는 순간이야말로 버스킹의 진짜 매력이라고 생각하는 당신! 오늘도 마이크 앞에 선 아티스트와 눈을 맞추며 떼창할 준비, 되셨나요?",
       keywords:["#떼창필수","#감성보컬수집가","#피크닉엔노래"],
-      color:"var(--yellow)", stages:["B"], curated:null,
-      ttSub:"스테이지 B(잔디광장 데크무대)를 통째로 추천해요! ✨"
+      color:"var(--yellow)",
+      recommend:{ A:["새비","밴드 이상한 술집","뮤랑극단","헬로유기농","알파카어쿠스테이지"], B:["암행악사","소리"], C:["심각한 개구리","요들누나 동혜","기봉","전병철"] },
+      ttSub:"반짝이는 자리가 당신을 위한 무대예요! ✨"
     },
     I:{
-      emoji:TYPE_EMOJI.I, tag:"당신의 최애 버스킹 취향은",
+      emoji:TYPE_EMOJI.I, tag:"당신의 최애 버스킹 취향은!",
       title:"손끝의 전율, 선율에 빠진 연주 감상가",
-      desc:"화려한 말보다 섬세한 손끝의 움직임에 더 끌리는 당신. 기타, 바이올린, 아코디언이 만들어내는 정교한 선율과 예측 못한 애드리브 앞에서 조용히 몰입하는 타입이에요. 오늘은 눈을 감고 악기 하나가 빚어내는 세계에 흠뻑 빠져보세요.",
+      desc:"화려한 말보다 섬세한 손끝의 움직임에 더 끌리는 당신. 기타, 바이올린, 아코디언 등의 악기가 만들어내는 정교한 선율과 예측 못한 애드리브 앞에서 조용히 몰입하는 타입이에요. 오늘은 눈을 감고 악기들이 빚어내는 황홀한 세계에 흠뻑 빠져보세요.",
       keywords:["#연주덕후","#몰입감최고","#선율수집가"],
-      color:"var(--green-mid)", stages:["A","B","C"],
-      curated:[["A","13:40–14:00"],["B","15:40–16:00"],["B","16:00–16:20"],["C","16:10–16:30"],["A","16:30–16:50"]],
-      ttSub:"스테이지 곳곳에 숨은 연주 중심 무대만 골라봤어요 ✨"
+      color:"var(--green-mid)",
+      recommend:{ A:["김경호(아코디언킴)","김민석"], B:["퀸즈밴드","김나린","로로컴퍼니"], C:["타미르","아코디언 주연"] },
+      ttSub:"반짝이는 자리가 당신을 위한 무대예요! ✨"
     },
     T:{
-      emoji:TYPE_EMOJI.T, tag:"당신의 최애 버스킹 취향은",
+      emoji:TYPE_EMOJI.T, tag:"당신의 최애 버스킹 취향은!",
       title:"얼쑤 좋다! 흥이 넘치는 전통예술 애호가",
       desc:"꽹과리와 장구 소리만 들리면 심장이 먼저 반응하는 당신! 국악과 풍물, 판소리 특유의 흥과 감성이 어우러진 무대에서 가장 큰 에너지를 느껴요. “얼쑤!”, “좋다!” 추임새 하나로 아티스트와 하나가 되는, 진정한 흥부자입니다.",
-      keywords:["#흥부자","#추임새장인","#우리가락최고"],
-      color:"#C1512F", stages:["C"], curated:null,
-      ttSub:"스테이지 C(행사장 진입로 무대)를 통째로 추천해요! ✨"
+      keywords:["#흥부자","#추임새장인","#우리가락최고","#국뽕충전"],
+      color:"#C1512F",
+      recommend:{ A:[], B:["창작음악집단 두럭"], C:["구각노리","용용클태 Y2KT"] },
+      ttSub:"반짝이는 자리가 당신을 위한 무대예요! ✨"
     }
   };
   var TYPE_ORDER = ["P","M","I","T"];
   var TYPE_LABEL = {P:"퍼포먼스", M:"대중음악", I:"악기연주", T:"전통예술"};
+  /* CSS 변수를 못 쓰는 <canvas> 안에서 취향분포 막대 색을 그릴 때 쓰는 실제 색상값(CSS var와 동일) */
+  var CANVAS_TYPE_COLOR = {P:"#FF4F8B", M:"#FFC72C", I:"#2F8C4F", T:"#C1512F"};
 
   /* =========================================================
      4. STATE — answers[i] = 선택한 옵션 인덱스 (null = 미응답)
@@ -739,10 +814,11 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     retryBtn: document.getElementById("retryBtn"),
     phoneBtn: document.getElementById("phoneBtn"),
     igBtn: document.getElementById("igBtn"),
+    snsBtn: document.getElementById("snsBtn"),
     toast: document.getElementById("toast"),
     cardModal: document.getElementById("cardModal"),
     cardImg: document.getElementById("cardImg"),
-    closeModalBtn: document.getElementById("closeModalBtn"),
+    downloadCloseBtn: document.getElementById("downloadCloseBtn"),
     qrModal: document.getElementById("qrModal"),
     qrWrap: document.getElementById("qrWrap"),
     closeQrModalBtn: document.getElementById("closeQrModalBtn")
@@ -773,6 +849,13 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     }
   }
 
+  /* 문장이 여러 개인 문항은 임의의 폭에서 줄바꿈되지 않고, 문장이 끝나는 지점(다./까?/어!)에서
+     줄이 바뀌도록 문장 단위로 나눠 <br>을 넣습니다. */
+  function formatQuestionText(text){
+    var parts = text.split(/(?<=[.?!])\s+(?=\S)/);
+    return parts.join("<br>");
+  }
+
   function renderQuestion(qi){
     var q = QUESTIONS[qi];
     els.qCounter.textContent = "Q" + (qi+1) + " / " + QUESTIONS.length;
@@ -780,7 +863,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     els.qPercent.textContent = "진행 상황 " + pct + "%";
     els.progressFill.style.width = pct + "%";
     els.qNumBig.textContent = "Q" + (qi+1) + ".";
-    els.qTextBody.innerHTML = " " + q.text;
+    els.qTextBody.innerHTML = " " + formatQuestionText(q.text);
     els.qTextWrap.classList.toggle("wide-wrap", !!WIDE_WRAP_INDEXES[qi]);
 
     var dotEls = els.dots.children;
@@ -840,22 +923,28 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 
     els.resEmoji.textContent = top.map(function(k){ return RESULT_TYPES[k].emoji; }).join(" ");
 
+    var finalTag, finalTitle, finalDesc, finalKeywords;
+
     if(!isTie){
-      els.resTag.textContent = primary.tag;
-      els.resTitle.textContent = primary.title;
-      els.resDesc.textContent = primary.desc;
-      els.resKeywords.innerHTML = primary.keywords.map(function(k){ return '<span class="kw">'+k+'</span>'; }).join("");
+      finalTag = primary.tag;
+      finalTitle = primary.title;
+      finalDesc = primary.desc;
+      finalKeywords = primary.keywords.slice();
       els.ttSub.textContent = primary.ttSub;
     } else {
       var names = top.map(function(k){ return TYPE_LABEL[k]+"형"; }).join(" × ");
-      els.resTag.textContent = "당신의 최애 버스킹 취향은 (혼합형)";
-      els.resTitle.textContent = names + " 올라운더";
-      els.resDesc.textContent = top.map(function(k){ return RESULT_TYPES[k].desc; }).join(" ");
-      var kws = [];
-      top.forEach(function(k){ kws = kws.concat(RESULT_TYPES[k].keywords.slice(0,2)); });
-      els.resKeywords.innerHTML = kws.map(function(k){ return '<span class="kw">'+k+'</span>'; }).join("");
+      finalTag = "당신의 최애 버스킹 취향은! (혼합형)";
+      finalTitle = names + " 올라운더";
+      finalDesc = top.map(function(k){ return RESULT_TYPES[k].desc; }).join(" ");
+      finalKeywords = [];
+      top.forEach(function(k){ finalKeywords = finalKeywords.concat(RESULT_TYPES[k].keywords.slice(0,2)); });
       els.ttSub.textContent = "여러 취향을 골고루 가진 당신을 위해 무대를 두루 추천해요 ✨";
     }
+
+    els.resTag.textContent = finalTag;
+    els.resTitle.textContent = finalTitle;
+    els.resDesc.textContent = finalDesc;
+    els.resKeywords.innerHTML = finalKeywords.map(function(k){ return '<span class="kw">'+k+'</span>'; }).join("");
 
     var maxScore = Math.max.apply(null, TYPE_ORDER.map(function(k){ return scores[k]; })) || 1;
     els.scoreRows.innerHTML = TYPE_ORDER.map(function(k){
@@ -870,51 +959,74 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 
     renderTimetable(isTie ? top : [top[0]]);
 
+    /* 공유 카드 이미지는 이 객체에 담긴 값만 그대로 사용합니다(다시 계산하지 않음).
+       화면에 보이는 결과와 저장되는 이미지 속 결과가 항상 100% 일치하도록 보장하기 위함입니다. */
     state.lastResult = {
       isTie: isTie,
-      title: isTie ? (top.map(function(k){return TYPE_LABEL[k]+"형";}).join(" × ") + " 올라운더") : primary.title,
-      emoji: els.resEmoji.textContent
+      tag: finalTag,
+      title: finalTitle,
+      desc: finalDesc,
+      keywords: finalKeywords.slice(),
+      emoji: els.resEmoji.textContent,
+      scores: scores
     };
   }
 
-  function renderTimetable(topKeys){
-    var html = "";
-    var showStages = [];
-    var curatedSet = {};
+  /* topKeys(1개 이상의 유형)에 해당하는 추천 아티스트를 스테이지별로 합쳐서
+     "이 스테이지의 이 아티스트는 반짝이게" 표시할 집합을 만듭니다. */
+  function buildRecommendSet(topKeys){
+    var set = {A:{}, B:{}, C:{}};
+    topKeys.forEach(function(k){
+      var rec = RESULT_TYPES[k].recommend;
+      STAGE_KEYS.forEach(function(sk){
+        (rec[sk] || []).forEach(function(name){ set[sk][name] = true; });
+      });
+    });
+    return set;
+  }
 
-    if(topKeys.length === 1 && topKeys[0] !== "I"){
-      showStages = RESULT_TYPES[topKeys[0]].stages;
-    } else {
-      showStages = ["A","B","C"];
-      topKeys.forEach(function(k){
-        var rt = RESULT_TYPES[k];
-        if(rt.curated){
-          rt.curated.forEach(function(pair){ curatedSet[pair[0]+"|"+pair[1]] = true; });
+  function renderTimetable(topKeys){
+    var recommendSet = buildRecommendSet(topKeys);
+
+    var html = "";
+    html += '<thead>';
+    html += '<tr class="tt-cat-row">' +
+      '<th class="tt-timecol"></th>' +
+      '<th>🤹<br>퍼포먼스</th>' +
+      '<th>🎵<br>음악</th>' +
+      '<th>🪇<br>국악</th>' +
+    '</tr>';
+    html += '<tr class="tt-stage-row">' +
+      '<th class="tt-timecol">시간</th>' +
+      '<th>스테이지 A<span>' + SCHEDULE.A.sub.split(" · ")[0] + '</span></th>' +
+      '<th>스테이지 B<span>' + SCHEDULE.B.sub.split(" · ")[0] + '</span></th>' +
+      '<th>스테이지 C<span>' + SCHEDULE.C.sub.split(" · ")[0] + '</span></th>' +
+    '</tr>';
+    html += '</thead><tbody>';
+
+    HOUR_BUCKETS.forEach(function(bucket){
+      html += '<tr>';
+      html += '<td class="tt-timecol">' + bucket.hour + ':00 - ' + (parseInt(bucket.hour,10)+1) + ':00</td>';
+      STAGE_KEYS.forEach(function(sk){
+        var slots = bucket.stages[sk];
+        html += '<td class="tt-stagecell">';
+        if(!slots || slots.length === 0){
+          html += '<div class="tt-chip" style="opacity:.35;align-items:center;">–</div>';
         } else {
-          rt.stages.forEach(function(s){
-            SCHEDULE[s].slots.forEach(function(slot){ curatedSet[s+"|"+slot.t] = true; });
+          slots.forEach(function(slot){
+            var hl = !!recommendSet[sk][slot.a];
+            html += '<div class="tt-chip' + (hl ? " hl" : "") + '">' +
+              '<span class="t">' + slot.t + '</span>' +
+              '<span class="a">' + slot.a + (hl ? ' <span class="star">✨</span>' : '') + '</span>' +
+            '</div>';
           });
         }
+        html += '</td>';
       });
-    }
-
-    var fullHighlight = (topKeys.length === 1 && topKeys[0] !== "I");
-
-    showStages.forEach(function(stageKey){
-      var st = SCHEDULE[stageKey];
-      html += '<div class="stage-card' + (fullHighlight ? " glow" : "") + '">';
-      html += '<div class="stage-card-head"><span>' + st.label + '</span><span class="g">' + st.sub + '</span></div>';
-      st.slots.forEach(function(slot){
-        var hl = fullHighlight || curatedSet[stageKey+"|"+slot.t];
-        html += '<div class="slot-row' + (hl ? " hl" : "") + '">' +
-          '<span class="t">' + slot.t + '</span>' +
-          '<span class="a">' + slot.a + '</span>' +
-          (hl ? '<span class="star">✨</span>' : '') +
-        '</div>';
-      });
-      html += '</div>';
+      html += '</tr>';
     });
 
+    html += '</tbody>';
     els.timetable.innerHTML = html;
   }
 
@@ -960,8 +1072,9 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     ctx.closePath();
   }
 
-  function wrapText(ctx, text, x, y, maxWidth, lineHeight, align){
-    var chars = text.split("");
+  /* draw=false면 실제로 그리지 않고 줄바꿈 후 줄 수만 계산합니다(레이아웃 높이를 미리 재기 위함). */
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight, align, draw){
+    var chars = String(text || "").split("");
     var line = "";
     var lines = [];
     for(var n=0;n<chars.length;n++){
@@ -974,23 +1087,75 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       }
     }
     lines.push(line);
-    lines.forEach(function(l, i){
-      ctx.textAlign = align || "center";
-      ctx.fillText(l, x, y + i*lineHeight);
-    });
+    if(draw !== false){
+      lines.forEach(function(l, i){
+        ctx.textAlign = align || "center";
+        ctx.fillText(l, x, y + i*lineHeight);
+      });
+    }
     return lines.length;
   }
 
-  function generateShareImage(){
+  /* 배너 이미지(2026 김포 버스킹 페스티벌 배너)를 미리 한 번만 불러와 둡니다.
+     오프라인 상태에서도 서비스워커 캐시에 있으면 정상적으로 로드됩니다. */
+  var bannerImgPromise = new Promise(function(resolve){
+    var img = new Image();
+    img.onload = function(){ resolve(img); };
+    img.onerror = function(){ resolve(null); };
+    img.src = "assets/banner.jpg";
+  });
+
+  /* 공유 카드 이미지를 생성합니다. state.lastResult(화면에 이미 렌더링된 값)만 그대로 사용하고
+     여기서 유형을 다시 계산하지 않습니다 — 화면 결과와 이미지 결과가 다르게 나오는 문제를
+     원천적으로 막기 위한 설계입니다. */
+  function generateShareImage(bannerImg){
     var canvas = document.getElementById("shareCanvas");
     var ctx = canvas.getContext("2d");
-    var W = canvas.width, H = canvas.height;
+    var W = 1080;
 
-    var top = computeTopTypes(state.scores);
-    var primary = RESULT_TYPES[top[0]];
-    var title = state.lastResult ? state.lastResult.title : primary.title;
-    var emoji = state.lastResult ? state.lastResult.emoji : primary.emoji;
+    var r = state.lastResult || {};
+    var title = r.title || "";
+    var emoji = r.emoji || "";
+    var tag = "나의 최애 버스킹 취향은!";
+    var desc = r.desc || "";
+    var keywords = r.keywords || [];
+    var scores = r.scores || state.scores || {P:0,M:0,I:0,T:0};
+    var hashtagLine = keywords.join("  ");
 
+    var bannerW = 940;
+    var bannerH = bannerImg ? Math.round(bannerW * (bannerImg.height / bannerImg.width)) : 0;
+    var bannerY = 50;
+    var bannerGap = bannerImg ? 40 : 0;
+
+    var cardTop = bannerY + bannerH + bannerGap + (bannerImg ? 0 : 40);
+    var cardPadTop = 90;
+    var cardPadBottom = 70;
+
+    /* ---- 1차: 실제로 그리기 전에 필요한 세로 길이를 미리 계산 ---- */
+    ctx.font = "400 62px 'Jua'";
+    var titleLines = wrapText(ctx, title, 0, 0, W-280, 78, "center", false);
+    ctx.font = "400 30px 'Noto Sans KR'";
+    var descLines = wrapText(ctx, desc, 0, 0, W-320, 44, "center", false);
+    ctx.font = "700 28px 'Noto Sans KR'";
+    var kwLines = hashtagLine ? wrapText(ctx, hashtagLine, 0, 0, W-320, 40, "center", false) : 0;
+
+    var maxScoreVal = Math.max.apply(null, TYPE_ORDER.map(function(k){ return scores[k]||0; })) || 1;
+    var scoreRowH = 66;
+    var scoreBlockH = 70 + TYPE_ORDER.length*scoreRowH;
+
+    var contentH = 230 /* emoji */ + 80 /* tag */ + (titleLines*78 + 50) + (descLines*44 + 50) +
+      (kwLines ? kwLines*40 + 50 : 0) + scoreBlockH;
+
+    var cardH = cardPadTop + contentH + cardPadBottom;
+    var footerGap = 60;
+    var footerH = 60 + 60;
+    var bottomMargin = 60;
+    var H = cardTop + cardH + footerGap + footerH + bottomMargin;
+
+    canvas.width = W;
+    canvas.height = H;
+
+    /* ---- 2차: 실제 드로잉 ---- */
     var g = ctx.createLinearGradient(0,0,0,H);
     g.addColorStop(0,"#1F5C3A");
     g.addColorStop(.5,"#2F8C4F");
@@ -998,68 +1163,169 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     ctx.fillStyle = g;
     ctx.fillRect(0,0,W,H);
 
-    var glow = ctx.createRadialGradient(W*0.85,H*0.12,10,W*0.85,H*0.12,320);
+    var glow = ctx.createRadialGradient(W*0.85,H*0.1,10,W*0.85,H*0.1,320);
     glow.addColorStop(0,"rgba(255,199,44,.55)");
     glow.addColorStop(1,"rgba(255,199,44,0)");
     ctx.fillStyle = glow; ctx.fillRect(0,0,W,H);
 
-    var glow2 = ctx.createRadialGradient(W*0.1,H*0.92,10,W*0.1,H*0.92,320);
+    var glow2 = ctx.createRadialGradient(W*0.1,H*0.94,10,W*0.1,H*0.94,320);
     glow2.addColorStop(0,"rgba(255,79,139,.45)");
     glow2.addColorStop(1,"rgba(255,79,139,0)");
     ctx.fillStyle = glow2; ctx.fillRect(0,0,W,H);
 
-    ctx.fillStyle = "#EFFBE9";
-    ctx.font = "700 34px 'Noto Sans KR'";
-    ctx.textAlign = "center";
-    ctx.fillText("2026 김포 버스킹 페스티벌", W/2, 150);
-    ctx.font = "400 26px 'Noto Sans KR'";
-    ctx.fillStyle = "rgba(239,251,233,.85)";
-    ctx.fillText("9.6(일) 13:00–18:00 · 김포아트빌리지", W/2, 195);
+    if(bannerImg){
+      var bx = (W-bannerW)/2;
+      roundRect(ctx, bx, bannerY, bannerW, bannerH, 24);
+      ctx.save();
+      ctx.clip();
+      ctx.drawImage(bannerImg, bx, bannerY, bannerW, bannerH);
+      ctx.restore();
+    }
 
-    roundRect(ctx, 80, 420, W-160, 1080, 56);
+    roundRect(ctx, 80, cardTop, W-160, cardH, 56);
     ctx.fillStyle = "#FFFBEF";
     ctx.fill();
 
+    var y = cardTop + cardPadTop;
+
     ctx.font = "148px sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText(emoji, W/2, 640);
+    ctx.fillText(emoji, W/2, y + 100);
+    y += 230;
 
     ctx.fillStyle = "#FF4F8B";
     ctx.font = "700 32px 'Noto Sans KR'";
-    ctx.fillText("나의 최애 버스킹 취향은", W/2, 730);
+    ctx.fillText(tag, W/2, y);
+    y += 80;
 
     ctx.fillStyle = "#173B29";
     ctx.font = "400 62px 'Jua'";
-    wrapText(ctx, title, W/2, 830, W-280, 78, "center");
+    wrapText(ctx, title, W/2, y, W-280, 78, "center");
+    y += titleLines*78 + 50;
 
     ctx.font = "400 30px 'Noto Sans KR'";
     ctx.fillStyle = "#3E6B54";
-    wrapText(ctx, "지금 QR로 접속해서 당신의 취향도 확인해보세요!", W/2, 1330, W-320, 42, "center");
+    wrapText(ctx, desc, W/2, y, W-320, 44, "center");
+    y += descLines*44 + 50;
 
+    if(hashtagLine){
+      ctx.font = "700 28px 'Noto Sans KR'";
+      ctx.fillStyle = "#1F5C3A";
+      wrapText(ctx, hashtagLine, W/2, y, W-320, 40, "center");
+      y += kwLines*40 + 50;
+    }
+
+    ctx.textAlign = "center";
     ctx.font = "700 30px 'Noto Sans KR'";
+    ctx.fillStyle = "#173B29";
+    ctx.fillText("나의 취향분포", W/2, y);
+    y += 56;
+
+    var barX = W/2 - 260;
+    var barW = 320;
+    var labelX = barX - 24;
+    var valX = barX + barW + 40;
+    TYPE_ORDER.forEach(function(k){
+      var v = scores[k] || 0;
+      var w = Math.max(10, Math.round((v/maxScoreVal)*barW));
+      ctx.font = "700 26px 'Noto Sans KR'";
+      ctx.fillStyle = "#173B29";
+      ctx.textAlign = "right";
+      ctx.fillText(TYPE_EMOJI[k] + " " + TYPE_LABEL[k] + "형", labelX, y+8);
+
+      roundRect(ctx, barX, y-14, barW, 20, 10);
+      ctx.fillStyle = "rgba(31,92,58,.12)";
+      ctx.fill();
+      roundRect(ctx, barX, y-14, w, 20, 10);
+      ctx.fillStyle = CANVAS_TYPE_COLOR[k] || "#2F8C4F";
+      ctx.fill();
+
+      ctx.font = "700 26px 'Noto Sans KR'";
+      ctx.fillStyle = "#173B29";
+      ctx.textAlign = "left";
+      ctx.fillText(String(v), valX, y+8);
+      y += scoreRowH;
+    });
+
+    y = cardTop + cardH + footerGap;
+    ctx.font = "700 36px 'Noto Sans KR'";
     ctx.fillStyle = "#EFFBE9";
-    ctx.fillText("#최애버스킹취향테스트  #김포버스킹페스티벌", W/2, 1720);
-    ctx.font = "400 24px 'Noto Sans KR'";
-    ctx.fillStyle = "rgba(239,251,233,.8)";
-    ctx.fillText("주최·주관 (재)김포문화재단", W/2, 1770);
+    ctx.textAlign = "center";
+    wrapText(ctx, "#최애버스킹취향테스트  #김포버스킹페스티벌", W/2, y, W-120, 46, "center");
+    ctx.font = "400 29px 'Noto Sans KR'";
+    ctx.fillStyle = "rgba(239,251,233,.85)";
+    ctx.fillText("주최·주관 (재)김포문화재단", W/2, y+60);
 
     return canvas.toDataURL("image/png");
   }
 
-  function shareInstagram(){
+  function dataUrlToBlob(dataUrl){
+    return fetch(dataUrl).then(function(res){ return res.blob(); });
+  }
+
+  /* 폰트/배너 이미지가 모두 준비된 뒤 카드 이미지를 생성해 콜백으로 넘깁니다.
+     저장 모달, SNS 공유 버튼이 공통으로 이 함수를 사용합니다. */
+  function withShareImage(cb){
     var ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
     Promise.all([
+      bannerImgPromise,
       document.fonts.load("400 62px 'Jua'"),
       document.fonts.load("700 34px 'Noto Sans KR'"),
+      document.fonts.load("400 30px 'Noto Sans KR'"),
       ready
-    ]).then(function(){
-      var dataUrl = generateShareImage();
-      els.cardImg.src = dataUrl;
-      els.cardModal.classList.remove("hidden");
+    ]).then(function(results){
+      cb(generateShareImage(results[0]));
     }).catch(function(){
-      var dataUrl = generateShareImage();
+      cb(generateShareImage(null));
+    });
+  }
+
+  function showImageSaveModal(){
+    withShareImage(function(dataUrl){
       els.cardImg.src = dataUrl;
       els.cardModal.classList.remove("hidden");
+    });
+  }
+
+  function downloadCardImage(){
+    try{
+      var link = document.createElement("a");
+      link.href = els.cardImg.src;
+      link.download = "최애버스킹취향테스트_결과.png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch(e){}
+  }
+
+  /* 인스타그램에 직접 올리는 공개 API가 없으므로, 기기 공유 시트(Web Share API)를 띄워
+     사용자가 그 안에서 인스타그램을 선택해 공유하도록 합니다. 지원하지 않는 브라우저에서는
+     이미지 저장 모달로 대체합니다. */
+  function shareToSNS(){
+    withShareImage(function(dataUrl){
+      dataUrlToBlob(dataUrl).then(function(blob){
+        var file = null;
+        try{ file = new File([blob], "busking-result.png", {type:"image/png"}); }catch(e){}
+        if(file && navigator.canShare && navigator.canShare({files:[file]})){
+          navigator.share({
+            files:[file],
+            title:"최애 버스킹 취향 테스트",
+            text:"나의 최애 버스킹 취향 결과를 확인해보세요! 🎪"
+          }).catch(function(){});
+        } else if(navigator.share){
+          navigator.share({
+            title:"최애 버스킹 취향 테스트",
+            text:"나의 최애 버스킹 취향 결과를 확인해보세요! 🎪",
+            url: location.href
+          }).catch(function(){});
+        } else {
+          els.cardImg.src = dataUrl;
+          els.cardModal.classList.remove("hidden");
+          showToast("이 브라우저는 공유 기능이 없어요. 이미지를 저장해 인스타그램에 직접 올려주세요!");
+        }
+      }).catch(function(){
+        showToast("이미지 생성에 실패했어요. 다시 시도해주세요.");
+      });
     });
   }
 
@@ -1114,26 +1380,36 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   els.backBtn.addEventListener("click", function(){ history.back(); });
   els.retryBtn.addEventListener("click", goHome);
   els.phoneBtn.addEventListener("click", showPhoneQr);
-  els.igBtn.addEventListener("click", shareInstagram);
-  els.closeModalBtn.addEventListener("click", function(){ els.cardModal.classList.add("hidden"); });
+  els.igBtn.addEventListener("click", showImageSaveModal);
+  els.snsBtn.addEventListener("click", shareToSNS);
+  els.downloadCloseBtn.addEventListener("click", function(){
+    downloadCardImage();
+    els.cardModal.classList.add("hidden");
+  });
   els.cardModal.addEventListener("click", function(e){ if(e.target === els.cardModal) els.cardModal.classList.add("hidden"); });
   els.closeQrModalBtn.addEventListener("click", function(){ els.qrModal.classList.add("hidden"); });
   els.qrModal.addEventListener("click", function(e){ if(e.target === els.qrModal) els.qrModal.classList.add("hidden"); });
 
   buildDots();
 
+  /* 지정된 태블릿(공용 기기)에서는: 내 폰으로 결과 받기(QR) + 테스트 다시 하기.
+     방문객 본인 휴대폰(QR로 넘어온 화면)에서는: 결과 이미지 저장 + SNS 공유, 다시 하기 버튼은 숨김. */
   var sharedAnswers = parseSharedAnswers();
   if(sharedAnswers){
     isSharedView = true;
     state.answers = sharedAnswers;
     els.phoneBtn.classList.add("hidden");
     els.igBtn.classList.remove("hidden");
+    els.retryBtn.classList.add("hidden");
+    els.snsBtn.classList.remove("hidden");
     history.replaceState({screen:"result"}, "");
     renderResult();
     showScreen("result");
   } else {
     els.phoneBtn.classList.remove("hidden");
     els.igBtn.classList.add("hidden");
+    els.retryBtn.classList.remove("hidden");
+    els.snsBtn.classList.add("hidden");
     history.replaceState({screen:"start"}, "");
     showScreen("start");
   }
