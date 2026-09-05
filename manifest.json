@@ -1,10 +1,12 @@
 {
+  "id": "/",
   "name": "최애 버스킹 취향 테스트",
   "short_name": "버스킹 취향테스트",
   "description": "2026 김포 버스킹 페스티벌 취향 테스트",
   "start_url": "./index.html",
   "scope": "./",
-  "display": "fullscreen",
+  "display": "standalone",
+  "display_override": ["fullscreen", "standalone"],
   "orientation": "landscape",
   "background_color": "#1F5C3A",
   "theme_color": "#1F5C3A",
