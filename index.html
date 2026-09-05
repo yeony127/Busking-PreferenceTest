@@ -1150,9 +1150,16 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
   });
 
   /* 유형명 문구에 쉼표가 있으면(예: "손끝의 전율, 선율에 빠진 연주 감상가") 임의의 폭에서
-     끊기지 않고 쉼표 뒤에서 줄이 바뀌도록 쉼표 단위로 먼저 나눕니다. */
+     끊기지 않고 쉼표 뒤에서 줄이 바뀌도록 쉼표 단위로 먼저 나눕니다.
+     혼합형(올라운더) 결과는 "○○형 × ○○형 올라운더" 형태이므로, "올라운더"가 항상
+     둘째 줄에 단독으로 오도록 그 앞에서 강제로 줄을 나눕니다. */
   function splitBySegments(text){
-    var parts = String(text||"").split(",");
+    var t = String(text||"");
+    var ALLROUNDER_SUFFIX = " 올라운더";
+    if(t.length > ALLROUNDER_SUFFIX.length && t.slice(-ALLROUNDER_SUFFIX.length) === ALLROUNDER_SUFFIX){
+      return [t.slice(0, -ALLROUNDER_SUFFIX.length), "올라운더"];
+    }
+    var parts = t.split(",");
     if(parts.length === 1) return [text];
     var segs = [];
     for(var i=0;i<parts.length;i++){
