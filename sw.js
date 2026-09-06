@@ -2,7 +2,7 @@
 // - Chrome이 "홈 화면에 추가"를 진짜 설치형 PWA(주소창 없음)로 인식하게 하는 데 필요합니다.
 // - 부가 효과로 행사장 와이파이가 불안정해도 이미 방문한 화면은 캐시에서 빠르게 열립니다.
 
-const CACHE_NAME = "gimpo-busking-quiz-v8";
+const CACHE_NAME = "gimpo-busking-quiz-v10";
 const CORE_ASSETS = [
   "./",
   "./index.html",

@@ -346,6 +346,7 @@
   }
   .card-modal.hidden{ display:none; }
   .card-modal-inner{ max-width:340px; width:100%; text-align:center; margin:auto; padding:20px 0; }
+  .card-img-group{ display:flex; flex-direction:column; gap:14px; }
   .card-modal img{ width:100%; border-radius:20px; box-shadow:0 20px 50px rgba(0,0,0,.4); }
   .card-modal p{ color:#fff; font-size:15px; margin:16px 0; line-height:1.6; }
   .card-modal .btn-row{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
@@ -546,8 +547,11 @@
 
 <div class="card-modal hidden" id="cardModal">
   <div class="card-modal-inner">
-    <img id="cardImg" alt="최애 버스킹 취향 테스트 결과 카드">
-    <p>아래 버튼을 누르면 이미지가 저장돼요!<br>저장한 카드를 SNS에 공유해보세요 🎉</p>
+    <div class="card-img-group">
+      <img id="cardImg" alt="최애 버스킹 취향 테스트 결과 카드 1/2">
+      <img id="cardImg2" alt="최애 버스킹 취향 테스트 결과 카드 2/2">
+    </div>
+    <p>아래 버튼을 누르면 이미지 2장이 모두 저장돼요!<br>저장한 카드를 SNS에 공유해보세요 🎉</p>
     <div class="btn-row">
       <button id="downloadBtn">📥 다운로드</button>
       <button id="closeCardModalBtn">닫기</button>
@@ -563,7 +567,7 @@
   </div>
 </div>
 
-<canvas id="shareCanvas" width="1080" height="1920" style="display:none;"></canvas>
+<canvas id="shareCanvas" width="1080" height="1350" style="display:none;"></canvas>
 
 <script>
 /* QR Code Generator for JavaScript — Copyright (c) 2009 Kazuhiko Arase, MIT License. https://github.com/kazuhikoarase/qrcode-generator */
@@ -851,6 +855,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     toast: document.getElementById("toast"),
     cardModal: document.getElementById("cardModal"),
     cardImg: document.getElementById("cardImg"),
+    cardImg2: document.getElementById("cardImg2"),
     downloadBtn: document.getElementById("downloadBtn"),
     closeCardModalBtn: document.getElementById("closeCardModalBtn"),
     qrModal: document.getElementById("qrModal"),
@@ -1159,6 +1164,14 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     if(t.length > ALLROUNDER_SUFFIX.length && t.slice(-ALLROUNDER_SUFFIX.length) === ALLROUNDER_SUFFIX){
       return [t.slice(0, -ALLROUNDER_SUFFIX.length), "올라운더"];
     }
+    /* "흥 폭발!", "얼쑤 좋다!"처럼 느낌표로 끝나는 짧은 감탄구가 앞에 붙는 유형명은
+       그 느낌표 뒤에서 항상 줄이 바뀌도록 먼저 나눕니다. */
+    var bangIdx = t.indexOf("!");
+    if(bangIdx !== -1){
+      var head = t.slice(0, bangIdx+1);
+      var rest = t.slice(bangIdx+1).trim();
+      return rest ? [head, rest] : [head];
+    }
     var parts = t.split(",");
     if(parts.length === 1) return [text];
     var segs = [];
@@ -1220,11 +1233,18 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 
   /* 공유 카드 이미지를 생성합니다. state.lastResult(화면에 이미 렌더링된 값)만 그대로 사용하고
      여기서 유형을 다시 계산하지 않습니다 — 화면 결과와 이미지 결과가 다르게 나오는 문제를
-     원천적으로 막기 위한 설계입니다. */
-  function generateShareImage(bannerImg){
+     원천적으로 막기 위한 설계입니다.
+     인스타그램 피드 규격(1080×1350)에 정확히 맞춰 2장을 만듭니다:
+       1번 이미지 = 배너 + 베이지 박스(아이콘/문구/유형명 + 설명) + 해시태그
+       2번 이미지 = 배너 + 베이지 박스(아이콘/문구/유형명 + 나의 취향분포, 조금 더 크게) + 해시태그
+     두 이미지 모두 배너·베이지 박스 위치/크기·하단 해시태그 영역이 완전히 동일해서
+     캐러셀처럼 나란히 넘겨봐도 자연스럽게 이어집니다. */
+  function generateShareImages(bannerImg){
     var canvas = document.getElementById("shareCanvas");
     var ctx = canvas.getContext("2d");
-    var W = 1080;
+    var W = 1080, H = 1350;
+    canvas.width = W;
+    canvas.height = H;
 
     var r = state.lastResult || {};
     var title = r.title || "";
@@ -1232,225 +1252,278 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
     var emoji = r.emoji || "";
     var tag = "나의 최애 버스킹 취향은!";
     var desc = r.desc || "";
-    var keywords = r.keywords || [];
     var scores = r.scores || state.scores || {P:0,M:0,I:0,T:0};
+
+    var keywords = r.keywords || [];
 
     var bannerW = 940;
     var bannerH = bannerImg ? Math.round(bannerW * (bannerImg.height / bannerImg.width)) : 0;
-    var bannerY = 50;
-    var bannerGap = bannerImg ? 40 : 0;
+    var bannerMarginTop = 46; /* 배너 위 여백 */
+    var bannerGap = bannerImg ? 20 : 0;
+    var cardTop = bannerMarginTop + bannerH + bannerGap + (bannerImg ? 0 : 20);
+    var cardX = 80, cardW = W - 160, cardRadius = 56;
+    var cardBottom = H - 158; /* 하단 해시태그 + 주최·주관 영역 확보(베이지박스와의 여백 포함) */
+    var cardH = cardBottom - cardTop;
+    var cardPadTop = 36, cardPadBottom = 36;
+    var innerBudget = cardH - cardPadTop - cardPadBottom;
 
-    var cardTop = bannerY + bannerH + bannerGap + (bannerImg ? 0 : 40);
-    var cardPadTop = 90;
-    var cardPadBottom = 70;
+    function drawBackdrop(){
+      var g = ctx.createLinearGradient(0,0,0,H);
+      g.addColorStop(0,"#1F5C3A");
+      g.addColorStop(.5,"#2F8C4F");
+      g.addColorStop(1,"#8FD14F");
+      ctx.fillStyle = g;
+      ctx.fillRect(0,0,W,H);
 
-    /* ---- 1차: 실제로 그리기 전에 필요한 세로 길이를 미리 계산 ---- */
-    ctx.font = "400 62px 'Jua'";
-    var titleLines = wrapSegments(ctx, titleSegs, 0, 0, W-280, 78, "center", false);
-    var descFontPx = 36; // 결과 페이지 대비 20% 확대(기존 30px → 36px)
-    var descLineH = 53;
-    ctx.font = "400 " + descFontPx + "px 'Noto Sans KR'";
-    var descLines = wrapText(ctx, desc, 0, 0, W-320, descLineH, "center", false);
+      var glow = ctx.createRadialGradient(W*0.85,H*0.1,10,W*0.85,H*0.1,320);
+      glow.addColorStop(0,"rgba(255,199,44,.55)");
+      glow.addColorStop(1,"rgba(255,199,44,0)");
+      ctx.fillStyle = glow; ctx.fillRect(0,0,W,H);
 
-    var kwFont = "700 28px 'Noto Sans KR'";
-    var kwPadX = 22, kwPadY = 13, kwGap = 16, kwRowGap = 16;
-    var kwLayout = keywords.length ? layoutChips(ctx, keywords, kwFont, kwPadX, kwGap, W-320) : {rows:[]};
-    var kwChipH = 28 + kwPadY*2;
-    var kwBlockH = kwLayout.rows.length ? (kwLayout.rows.length*kwChipH + (kwLayout.rows.length-1)*kwRowGap) : 0;
+      var glow2 = ctx.createRadialGradient(W*0.1,H*0.94,10,W*0.1,H*0.94,320);
+      glow2.addColorStop(0,"rgba(255,79,139,.45)");
+      glow2.addColorStop(1,"rgba(255,79,139,0)");
+      ctx.fillStyle = glow2; ctx.fillRect(0,0,W,H);
 
-    var maxScoreVal = Math.max.apply(null, TYPE_ORDER.map(function(k){ return scores[k]||0; })) || 1;
-    var scoreRowH = 66;
+      if(bannerImg){
+        var bx = (W-bannerW)/2;
+        roundRect(ctx, bx, bannerMarginTop, bannerW, bannerH, 24);
+        ctx.save();
+        ctx.clip();
+        ctx.drawImage(bannerImg, bx, bannerMarginTop, bannerW, bannerH);
+        ctx.restore();
+      }
 
-    /* 취향분포 막대들을 하나의 그룹으로 보고, 그 그룹 폭을 기준으로 박스 안에서 가운데 정렬합니다
-       (결과 페이지의 흰색 score-box와 동일하게 박스 형태로 감싸 그립니다). */
-    ctx.font = "700 26px 'Noto Sans KR'";
-    var maxLabelW = 0;
-    TYPE_ORDER.forEach(function(k){
-      maxLabelW = Math.max(maxLabelW, ctx.measureText(TYPE_EMOJI[k] + " " + TYPE_LABEL[k] + "형").width);
-    });
-    var rowBarW = 320, rowValW = 70, rowGapSeg = 28;
-    var rowTotalW = maxLabelW + rowGapSeg + rowBarW + rowGapSeg + rowValW;
-    var scoreBoxW = Math.min(860, Math.max(680, rowTotalW + 160));
-    var scoreBoxPad = 34;
-    var scoreTitleBlockH = 56;
-    var scoreBoxContentH = 30 + scoreTitleBlockH + TYPE_ORDER.length*scoreRowH;
-    var scoreBoxH = scoreBoxContentH + scoreBoxPad*2;
-    var gapBeforeBox = 14;
-
-    var contentH = 230 /* emoji */ + 80 /* tag */ + (titleLines*78 + 50) + (descLines*descLineH + 50) +
-      (kwBlockH ? kwBlockH + 50 : 0) + gapBeforeBox + scoreBoxH;
-
-    var cardH = cardPadTop + contentH + cardPadBottom;
-    var footerGap = 60;
-    var footerH = 60 + 60;
-    var bottomMargin = 60;
-    var H = cardTop + cardH + footerGap + footerH + bottomMargin;
-
-    canvas.width = W;
-    canvas.height = H;
-
-    /* ---- 2차: 실제 드로잉 ---- */
-    var g = ctx.createLinearGradient(0,0,0,H);
-    g.addColorStop(0,"#1F5C3A");
-    g.addColorStop(.5,"#2F8C4F");
-    g.addColorStop(1,"#8FD14F");
-    ctx.fillStyle = g;
-    ctx.fillRect(0,0,W,H);
-
-    var glow = ctx.createRadialGradient(W*0.85,H*0.1,10,W*0.85,H*0.1,320);
-    glow.addColorStop(0,"rgba(255,199,44,.55)");
-    glow.addColorStop(1,"rgba(255,199,44,0)");
-    ctx.fillStyle = glow; ctx.fillRect(0,0,W,H);
-
-    var glow2 = ctx.createRadialGradient(W*0.1,H*0.94,10,W*0.1,H*0.94,320);
-    glow2.addColorStop(0,"rgba(255,79,139,.45)");
-    glow2.addColorStop(1,"rgba(255,79,139,0)");
-    ctx.fillStyle = glow2; ctx.fillRect(0,0,W,H);
-
-    if(bannerImg){
-      var bx = (W-bannerW)/2;
-      roundRect(ctx, bx, bannerY, bannerW, bannerH, 24);
-      ctx.save();
-      ctx.clip();
-      ctx.drawImage(bannerImg, bx, bannerY, bannerW, bannerH);
-      ctx.restore();
+      roundRect(ctx, cardX, cardTop, cardW, cardH, cardRadius);
+      ctx.fillStyle = "#FFFBEF";
+      ctx.fill();
     }
 
-    roundRect(ctx, 80, cardTop, W-160, cardH, 56);
-    ctx.fillStyle = "#FFFBEF";
-    ctx.fill();
-
-    var y = cardTop + cardPadTop;
-
-    ctx.font = "148px sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText(emoji, W/2, y + 100);
-    y += 230;
-
-    ctx.fillStyle = "#FF4F8B";
-    ctx.font = "700 32px 'Noto Sans KR'";
-    ctx.fillText(tag, W/2, y);
-    y += 80;
-
-    ctx.fillStyle = "#173B29";
-    ctx.font = "400 62px 'Jua'";
-    wrapSegments(ctx, titleSegs, W/2, y, W-280, 78, "center");
-    y += titleLines*78 + 50;
-
-    ctx.font = "400 " + descFontPx + "px 'Noto Sans KR'";
-    ctx.fillStyle = "#3E6B54";
-    wrapText(ctx, desc, W/2, y, W-320, descLineH, "center");
-    y += descLines*descLineH + 50;
-
-    if(kwBlockH){
-      drawChips(ctx, keywords, W/2, y, kwFont, "#1F5C3A", "#EFF7E9", kwPadX, kwPadY, kwGap, kwRowGap, W-320);
-      y += kwBlockH + 50;
+    function drawFooter(){
+      var y = cardBottom + 48; /* 베이지박스와 하단 해시태그 사이 여백(상단 배너 여백과 비슷하게) */
+      ctx.textAlign = "center";
+      ctx.font = "700 34px 'Noto Sans KR'";
+      ctx.fillStyle = "#EFFBE9";
+      ctx.fillText("#최애버스킹취향테스트  #김포버스킹페스티벌", W/2, y);
+      ctx.font = "400 26px 'Noto Sans KR'";
+      ctx.fillStyle = "rgba(239,251,233,.85)";
+      ctx.fillText("주최·주관 (재)김포문화재단", W/2, y+46);
     }
 
-    y += gapBeforeBox;
-    var boxX = (W-scoreBoxW)/2;
-    roundRect(ctx, boxX, y, scoreBoxW, scoreBoxH, 28);
-    ctx.fillStyle = "#fff";
-    ctx.fill();
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = "#E4E0CC";
-    ctx.stroke();
+    /* bodyType별 헤더(아이콘/문구/유형명) 스타일. desc(1번 이미지)는 아이콘을 더 크게,
+       아이콘-문구-유형명 사이 간격도 더 넉넉하게 둡니다. score(2번 이미지)는 기존 크기를 유지합니다. */
+    var HEADER_STYLE = {
+      desc:  { emojiFont:128, emojiBlockH:170, tagFont:28, tagBlockH:62, titleFont:50, titleLineH:66, titleGapAfter:40 },
+      score: { emojiFont:100, emojiBlockH:120, tagFont:26, tagBlockH:50, titleFont:48, titleLineH:60, titleGapAfter:28 }
+    };
 
-    var innerY = y + scoreBoxPad + 26;
-    ctx.textAlign = "center";
-    ctx.font = "700 30px 'Noto Sans KR'";
-    ctx.fillStyle = "#173B29";
-    ctx.fillText("나의 취향분포", W/2, innerY);
-    innerY += scoreTitleBlockH;
+    /* bodyType: "desc"(설명글) 또는 "score"(나의 취향분포).
+       내용이 많으면(특히 혼합형 올라운더처럼 유형명이 길어지는 경우) 배율(scale)을
+       살짝 줄여서, 어떤 경우에도 카드 안쪽 여백을 넘치지 않고 항상 1080×1350 안에 들어오게 합니다. */
+    function measure(scale, bodyType){
+      var hs = HEADER_STYLE[bodyType];
+      var emojiFont = hs.emojiFont*scale;
+      var emojiBlockH = hs.emojiBlockH*scale;
+      var tagFont = hs.tagFont*scale;
+      var tagBlockH = hs.tagBlockH*scale;
+      var titleFont = hs.titleFont*scale;
+      var titleLineH = hs.titleLineH*scale;
+      var titleGapAfter = hs.titleGapAfter*scale;
 
-    var rowStartX = W/2 - rowTotalW/2;
-    var labelRightX = rowStartX + maxLabelW;
-    var barX2 = labelRightX + rowGapSeg;
-    var valX2 = barX2 + rowBarW + rowGapSeg;
-    TYPE_ORDER.forEach(function(k){
-      var v = scores[k] || 0;
-      var w = Math.max(10, Math.round((v/maxScoreVal)*rowBarW));
-      ctx.font = "700 26px 'Noto Sans KR'";
+      ctx.font = "400 " + titleFont + "px 'Jua'";
+      var titleLines = wrapSegments(ctx, titleSegs, 0, 0, W-280, titleLineH, "center", false);
+
+      var out = {
+        emojiFont: emojiFont, emojiBlockH: emojiBlockH, tagFont: tagFont, tagBlockH: tagBlockH,
+        titleFont: titleFont, titleLineH: titleLineH, titleGapAfter: titleGapAfter,
+        titleLines: titleLines
+      };
+
+      if(bodyType === "desc"){
+        var descFont = 35*scale, descLineH = 49*scale;
+        ctx.font = "400 " + descFont + "px 'Noto Sans KR'";
+        var descLines = wrapText(ctx, desc, 0, 0, W-320, descLineH, "center", false);
+        out.descFont = descFont; out.descLineH = descLineH; out.descLines = descLines;
+
+        var gapBeforeChips = 30*scale;
+        var kwFont = "700 " + (25*scale) + "px 'Noto Sans KR'";
+        var kwPadX = 20*scale, kwGap = 14*scale, kwRowGap = 12*scale, kwPadY = 12*scale;
+        var kwLayout = keywords.length ? layoutChips(ctx, keywords, kwFont, kwPadX, kwGap, W-320) : {rows:[]};
+        var kwChipH = 25*scale + kwPadY*2;
+        var kwBlockH = kwLayout.rows.length ? (kwLayout.rows.length*kwChipH + (kwLayout.rows.length-1)*kwRowGap) : 0;
+        out.gapBeforeChips = gapBeforeChips; out.kwFont = kwFont; out.kwPadX = kwPadX; out.kwGap = kwGap;
+        out.kwRowGap = kwRowGap; out.kwPadY = kwPadY; out.kwChipH = kwChipH; out.kwBlockH = kwBlockH;
+
+        out.contentH = emojiBlockH + tagBlockH + titleLines*titleLineH + titleGapAfter + descLines*descLineH +
+          (kwBlockH ? gapBeforeChips + kwBlockH : 0);
+      } else {
+        /* 결과 페이지의 흰색 취향분포 박스와 동일한 구성을, 기존보다 10% 키운 값을 기준으로 그립니다. */
+        var scoreRowH = 72.6*scale, scoreTitleBlockH = 61.6*scale, scoreBoxPad = 37.4*scale, scoreTopInset = 33*scale;
+        var scoreBoxContentH = scoreTopInset + scoreTitleBlockH + TYPE_ORDER.length*scoreRowH;
+        var scoreBoxH = scoreBoxContentH + scoreBoxPad*2;
+        out.scoreRowH = scoreRowH; out.scoreTitleBlockH = scoreTitleBlockH;
+        out.scoreBoxPad = scoreBoxPad; out.scoreTopInset = scoreTopInset; out.scoreBoxH = scoreBoxH;
+        out.contentH = emojiBlockH + tagBlockH + titleLines*titleLineH + titleGapAfter + scoreBoxH;
+      }
+      return out;
+    }
+
+    function drawCardContent(bodyType){
+      var scale = 1, L;
+      for(var i=0;i<10;i++){
+        L = measure(scale, bodyType);
+        if(L.contentH <= innerBudget || scale <= 0.72) break;
+        scale -= 0.03;
+      }
+      var y = cardTop + cardPadTop + Math.max(0, (innerBudget - L.contentH)/2);
+
+      ctx.textAlign = "center";
+      ctx.font = Math.round(L.emojiFont) + "px sans-serif";
+      ctx.fillText(emoji, W/2, y + L.emojiBlockH*0.65);
+      y += L.emojiBlockH;
+
+      ctx.fillStyle = "#FF4F8B";
+      ctx.font = "700 " + Math.round(L.tagFont) + "px 'Noto Sans KR'";
+      ctx.fillText(tag, W/2, y);
+      y += L.tagBlockH;
+
       ctx.fillStyle = "#173B29";
-      ctx.textAlign = "right";
-      ctx.fillText(TYPE_EMOJI[k] + " " + TYPE_LABEL[k] + "형", labelRightX, innerY+8);
+      ctx.font = "400 " + L.titleFont + "px 'Jua'";
+      wrapSegments(ctx, titleSegs, W/2, y, W-280, L.titleLineH, "center");
+      y += L.titleLines*L.titleLineH + L.titleGapAfter;
 
-      roundRect(ctx, barX2, innerY-14, rowBarW, 20, 10);
-      ctx.fillStyle = "rgba(31,92,58,.12)";
-      ctx.fill();
-      roundRect(ctx, barX2, innerY-14, w, 20, 10);
-      ctx.fillStyle = CANVAS_TYPE_COLOR[k] || "#2F8C4F";
-      ctx.fill();
+      if(bodyType === "desc"){
+        ctx.font = "400 " + L.descFont + "px 'Noto Sans KR'";
+        ctx.fillStyle = "#3E6B54";
+        wrapText(ctx, desc, W/2, y, W-320, L.descLineH, "center");
+        y += L.descLines*L.descLineH;
 
-      ctx.font = "700 26px 'Noto Sans KR'";
-      ctx.fillStyle = "#173B29";
-      ctx.textAlign = "left";
-      ctx.fillText(String(v), valX2, innerY+8);
-      innerY += scoreRowH;
-    });
+        if(L.kwBlockH){
+          y += L.gapBeforeChips;
+          drawChips(ctx, keywords, W/2, y, L.kwFont, "#1F5C3A", "#EFF7E9", L.kwPadX, L.kwPadY, L.kwGap, L.kwRowGap, W-320);
+        }
+      } else {
+        var maxScoreVal = Math.max.apply(null, TYPE_ORDER.map(function(k){ return scores[k]||0; })) || 1;
+        var labelFont = 28.6*scale, valFont = 28.6*scale, titleBoxFont = 33*scale;
+        var rowBarW = 352*scale, rowValW = 77*scale, rowGapSeg = 30.8*scale, barH = 22*scale, barRadius = 11*scale;
 
-    y = cardTop + cardH + footerGap;
-    ctx.font = "700 36px 'Noto Sans KR'";
-    ctx.fillStyle = "#EFFBE9";
-    ctx.textAlign = "center";
-    wrapText(ctx, "#최애버스킹취향테스트  #김포버스킹페스티벌", W/2, y, W-120, 46, "center");
-    ctx.font = "400 29px 'Noto Sans KR'";
-    ctx.fillStyle = "rgba(239,251,233,.85)";
-    ctx.fillText("주최·주관 (재)김포문화재단", W/2, y+60);
+        ctx.font = "700 " + labelFont + "px 'Noto Sans KR'";
+        var maxLabelW = 0;
+        TYPE_ORDER.forEach(function(k){
+          maxLabelW = Math.max(maxLabelW, ctx.measureText(TYPE_EMOJI[k] + " " + TYPE_LABEL[k] + "형").width);
+        });
+        var rowTotalW = maxLabelW + rowGapSeg + rowBarW + rowGapSeg + rowValW;
+        var scoreBoxW = Math.min(cardW - 80, Math.max(680*scale, rowTotalW + 160*scale));
+        var boxX = (W - scoreBoxW)/2;
 
-    return canvas.toDataURL("image/png");
+        roundRect(ctx, boxX, y, scoreBoxW, L.scoreBoxH, 28*scale);
+        ctx.fillStyle = "#fff";
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "#E4E0CC";
+        ctx.stroke();
+
+        var innerY = y + L.scoreBoxPad + L.scoreTopInset*0.8;
+        ctx.textAlign = "center";
+        ctx.font = "700 " + titleBoxFont + "px 'Noto Sans KR'";
+        ctx.fillStyle = "#173B29";
+        ctx.fillText("나의 취향분포", W/2, innerY);
+        innerY += L.scoreTitleBlockH;
+
+        var rowStartX = W/2 - rowTotalW/2;
+        var labelRightX = rowStartX + maxLabelW;
+        var barX2 = labelRightX + rowGapSeg;
+        var valX2 = barX2 + rowBarW + rowGapSeg;
+        TYPE_ORDER.forEach(function(k){
+          var v = scores[k] || 0;
+          var w = Math.max(10*scale, Math.round((v/maxScoreVal)*rowBarW));
+          ctx.font = "700 " + labelFont + "px 'Noto Sans KR'";
+          ctx.fillStyle = "#173B29";
+          ctx.textAlign = "right";
+          ctx.fillText(TYPE_EMOJI[k] + " " + TYPE_LABEL[k] + "형", labelRightX, innerY+8*scale);
+
+          roundRect(ctx, barX2, innerY-barH/2, rowBarW, barH, barRadius);
+          ctx.fillStyle = "rgba(31,92,58,.12)";
+          ctx.fill();
+          roundRect(ctx, barX2, innerY-barH/2, w, barH, barRadius);
+          ctx.fillStyle = CANVAS_TYPE_COLOR[k] || "#2F8C4F";
+          ctx.fill();
+
+          ctx.font = "700 " + valFont + "px 'Noto Sans KR'";
+          ctx.fillStyle = "#173B29";
+          ctx.textAlign = "left";
+          ctx.fillText(String(v), valX2, innerY+8*scale);
+          innerY += L.scoreRowH;
+        });
+      }
+    }
+
+    function renderOne(bodyType){
+      ctx.clearRect(0,0,W,H);
+      drawBackdrop();
+      drawCardContent(bodyType);
+      drawFooter();
+      return canvas.toDataURL("image/png");
+    }
+
+    return [renderOne("desc"), renderOne("score")];
   }
 
   function dataUrlToBlob(dataUrl){
     return fetch(dataUrl).then(function(res){ return res.blob(); });
   }
 
-  /* 폰트/배너 이미지가 모두 준비된 뒤 카드 이미지를 생성해 콜백으로 넘깁니다.
-     저장 모달, SNS 공유 버튼이 공통으로 이 함수를 사용합니다. */
+  /* 폰트/배너 이미지가 모두 준비된 뒤 카드 이미지 2장(설명 카드 + 취향분포 카드)을 생성해
+     콜백으로 넘깁니다. 저장 모달, SNS 공유 버튼이 공통으로 이 함수를 사용합니다. */
   function withShareImage(cb){
     var ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
     Promise.all([
       bannerImgPromise,
-      document.fonts.load("400 62px 'Jua'"),
+      document.fonts.load("400 48px 'Jua'"),
       document.fonts.load("700 34px 'Noto Sans KR'"),
-      document.fonts.load("400 30px 'Noto Sans KR'"),
+      document.fonts.load("400 32px 'Noto Sans KR'"),
       ready
     ]).then(function(results){
-      cb(generateShareImage(results[0]));
+      cb(generateShareImages(results[0]));
     }).catch(function(){
-      cb(generateShareImage(null));
+      cb(generateShareImages(null));
     });
   }
 
   function showImageSaveModal(){
-    withShareImage(function(dataUrl){
-      els.cardImg.src = dataUrl;
+    withShareImage(function(dataUrls){
+      els.cardImg.src = dataUrls[0];
+      els.cardImg2.src = dataUrls[1];
       openModal(els.cardModal);
     });
   }
 
   function downloadCardImage(){
     try{
-      var link = document.createElement("a");
-      link.href = els.cardImg.src;
-      link.download = "최애버스킹취향테스트_결과.png";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      [[els.cardImg.src,"1"], [els.cardImg2.src,"2"]].forEach(function(pair){
+        var link = document.createElement("a");
+        link.href = pair[0];
+        link.download = "최애버스킹취향테스트_결과_" + pair[1] + ".png";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
     } catch(e){}
   }
 
   /* 인스타그램에 직접 올리는 공개 API가 없으므로, 기기 공유 시트(Web Share API)를 띄워
-     사용자가 그 안에서 인스타그램을 선택해 공유하도록 합니다. 지원하지 않는 브라우저에서는
-     이미지 저장 모달로 대체합니다. */
+     사용자가 그 안에서 인스타그램을 선택해 공유하도록 합니다(이미지 2장을 함께 전달).
+     지원하지 않는 브라우저에서는 이미지 저장 모달로 대체합니다. */
   function shareToSNS(){
-    withShareImage(function(dataUrl){
-      dataUrlToBlob(dataUrl).then(function(blob){
-        var file = null;
-        try{ file = new File([blob], "busking-result.png", {type:"image/png"}); }catch(e){}
-        if(file && navigator.canShare && navigator.canShare({files:[file]})){
+    withShareImage(function(dataUrls){
+      Promise.all(dataUrls.map(dataUrlToBlob)).then(function(blobs){
+        var files = null;
+        try{
+          files = blobs.map(function(blob, i){ return new File([blob], "busking-result-" + (i+1) + ".png", {type:"image/png"}); });
+        }catch(e){}
+        if(files && navigator.canShare && navigator.canShare({files:files})){
           navigator.share({
-            files:[file],
+            files:files,
             title:"최애 버스킹 취향 테스트",
             text:"나의 최애 버스킹 취향 결과를 공유해보세요! 🎪"
           }).catch(function(){});
@@ -1461,7 +1534,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
             url: location.href
           }).catch(function(){});
         } else {
-          els.cardImg.src = dataUrl;
+          els.cardImg.src = dataUrls[0];
+          els.cardImg2.src = dataUrls[1];
           openModal(els.cardModal);
           showToast("이 브라우저는 공유 기능이 없어요. 이미지를 저장해 인스타그램에 직접 올려주세요!");
         }
